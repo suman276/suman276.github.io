@@ -12,18 +12,16 @@ export default function Hero() {
     >
       <ParallaxGlow />
 
-      {/* Photo — a clean framed card, not a background cutout */}
-      <div className="relative mt-10 flex justify-center md:absolute md:inset-y-0 md:right-0 md:mt-0 md:w-[38%] md:items-center md:justify-end md:pr-10 lg:w-[34%] lg:pr-14">
-        <div className="relative aspect-[4/5] w-64 overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl shadow-black/40 sm:w-72 md:w-full md:max-w-sm">
-          <Image
-            src="/images/profile.webp"
-            alt="Suman Mondal"
-            fill
-            priority
-            sizes="(min-width: 768px) 30vw, 288px"
-            className="object-cover"
-          />
-        </div>
+      {/* Photo — full-length cutout, no card or background behind it */}
+      <div className="relative mt-10 flex justify-center md:absolute md:inset-y-0 md:right-0 md:mt-0 md:w-[38%] md:items-end md:justify-end lg:w-[34%] lg:pr-6">
+        <Image
+          src="/images/profile.webp"
+          alt="Suman Mondal"
+          width={315}
+          height={438}
+          priority
+          className="h-72 w-auto object-contain sm:h-96 md:h-[85%] md:max-h-[560px]"
+        />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
