@@ -30,7 +30,7 @@ export default function ParallaxGlow() {
     <div
       ref={ref}
       aria-hidden
-      className="pointer-events-none absolute -right-16 -top-24 h-80 w-80 rounded-full bg-brand-teal/25 blur-3xl"
+      className="pointer-events-none absolute -left-16 -top-24 h-80 w-80 rounded-full bg-brand-teal/25 blur-3xl"
     />
   );
 }
