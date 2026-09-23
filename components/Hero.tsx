@@ -12,20 +12,18 @@ export default function Hero() {
     >
       <ParallaxGlow />
 
-      {/* Photo — bleeds to the section's right and bottom edge on desktop */}
-      <div className="relative mt-10 flex h-64 justify-center p-[25px] sm:h-80 md:absolute md:inset-y-0 md:right-0 md:mt-0 md:h-auto md:w-[42%] md:justify-end md:pr-6 lg:w-[38%] lg:pr-10">
-        <div
-          aria-hidden
-          className="absolute bottom-0 right-6 top-10 w-[75%] rounded-[2rem] border border-white/15 bg-white/5 backdrop-blur-sm md:right-10"
-        />
-        <Image
-          src="/images/profile.webp"
-          alt="Suman Mondal"
-          fill
-          priority
-          sizes="(min-width: 768px) 40vw, 320px"
-          className="z-10 object-contain object-bottom blur-[3px]"
-        />
+      {/* Photo — a clean framed card, not a background cutout */}
+      <div className="relative mt-10 flex justify-center md:absolute md:inset-y-0 md:right-0 md:mt-0 md:w-[38%] md:items-center md:justify-end md:pr-10 lg:w-[34%] lg:pr-14">
+        <div className="relative aspect-[4/5] w-64 overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl shadow-black/40 sm:w-72 md:w-full md:max-w-sm">
+          <Image
+            src="/images/profile.webp"
+            alt="Suman Mondal"
+            fill
+            priority
+            sizes="(min-width: 768px) 30vw, 288px"
+            className="object-cover"
+          />
+        </div>
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
