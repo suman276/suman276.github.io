@@ -4,7 +4,7 @@ export const profile = {
   tagline:
     "3+ years delivering end-to-end ServiceNow implementations across ITSM, HAM, SAM, CMDB, App Engine, and AI-powered workflows for global enterprises.",
   summary:
-    "Results-driven ServiceNow Consultant and Developer with 3+ years of experience delivering end-to-end digital transformation engagements for global enterprises. Combines deep platform expertise — across ITSM, HAM, SAM, CMDB, App Engine, and AI-powered workflows — with strong consulting fundamentals including client discovery, solution architecture, effort estimation, and governance. Certified ServiceNow professional (CSA, CIS-ITSM, CIS-HAM, CIS-SAM) with demonstrated success in pre-sales POC delivery, managed services leadership, and training.",
+    "Results-driven ServiceNow Consultant and Developer with 3+ years of experience delivering end-to-end digital transformation engagements for global enterprises. Combines deep platform expertise — across ITSM, HAM, SAM, CMDB, App Engine, and AI-powered workflows — with strong consulting fundamentals including client discovery, solution architecture, effort estimation, and governance. Certified ServiceNow professional (CSA, CIS-ITSM, CIS-HAM, CIS-SAM, CIS-DF) with demonstrated success in pre-sales POC delivery, managed services leadership, and training.",
   email: "imsuman276@gmail.com",
   linkedin: "https://www.linkedin.com/in/mondalsuman/",
   location: "Noida, India",
@@ -12,7 +12,7 @@ export const profile = {
 
 export const stats = [
   { value: "3+", label: "Years in ServiceNow" },
-  { value: "4", label: "Certifications" },
+  { value: "5", label: "Certifications" },
   { value: "10", label: "Enterprise projects delivered" },
   { value: "25+", label: "Sites/plants deployed to" },
 ];
@@ -227,6 +227,10 @@ export const certifications = [
   {
     code: "CIS-SAM",
     name: "Certified Implementation Specialist — SAM",
+  },
+  {
+    code: "CIS-DF",
+    name: "Certified Implementation Specialist — Data Foundations",
   },
 ];
 

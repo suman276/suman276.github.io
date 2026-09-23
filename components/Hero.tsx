@@ -24,15 +24,17 @@ export default function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
-        <Reveal className="max-w-xl md:max-w-lg">
+      <div className="relative z-10 mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <Reveal className="max-w-xl md:max-w-none">
           <p className="section-heading text-brand-teal-light">
             {profile.role}
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">
             {profile.name}
           </h1>
-          <p className="mt-5 text-lg text-white/80">{profile.tagline}</p>
+          <p className="mt-5 text-lg text-white/80 md:max-w-2xl">
+            {profile.tagline}
+          </p>
 
           <div className="mt-8 flex flex-wrap gap-4">
             <a
@@ -49,14 +51,14 @@ export default function Hero() {
             </a>
           </div>
 
-          <dl className="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-4 md:max-w-md">
+          <dl className="mt-14 grid grid-cols-2 gap-8 sm:grid-cols-4">
             {stats.map((stat) => (
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="text-3xl font-bold text-brand-teal-light">
+                <dd className="text-4xl font-bold text-brand-teal-light">
                   <AnimatedNumber value={stat.value} />
                 </dd>
-                <p className="mt-1 text-sm text-white/70">{stat.label}</p>
+                <p className="mt-1 text-base text-white/70">{stat.label}</p>
               </div>
             ))}
           </dl>
