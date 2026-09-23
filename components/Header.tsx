@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { profile } from "@/lib/data";
 
 const links = [
@@ -14,6 +14,27 @@ const links = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [active, setActive] = useState("");
+
+  useEffect(() => {
+    const sections = links
+      .map((link) => document.getElementById(link.href.slice(1)))
+      .filter((el): el is HTMLElement => !!el);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActive(`#${entry.target.id}`);
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-surface/90 backdrop-blur">
@@ -27,7 +48,9 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted transition-colors hover:text-brand-navy"
+              className={`text-sm font-medium transition-colors hover:text-brand-navy ${
+                active === link.href ? "text-brand-navy" : "text-muted"
+              }`}
             >
               {link.label}
             </a>
@@ -38,7 +61,7 @@ export default function Header() {
           <a
             href="/resume.pdf"
             download
-            className="rounded-full bg-brand-navy px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark"
+            className="rounded-full bg-brand-navy px-5 py-2 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-brand-navy-dark"
           >
             Download Resume
           </a>
@@ -68,7 +91,9 @@ export default function Header() {
                 <a
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="text-sm font-medium text-muted hover:text-brand-navy"
+                  className={`text-sm font-medium hover:text-brand-navy ${
+                    active === link.href ? "text-brand-navy" : "text-muted"
+                  }`}
                 >
                   {link.label}
                 </a>

@@ -41,3 +41,61 @@ body {
   text-transform: uppercase;
   color: var(--brand-teal);
 }
+
+/*
+ * The page is split into three gradient zones instead of one gradient
+ * spanning the whole document. A single page-length gradient breaks on
+ * screens where section heights differ (mobile vs. desktop, more/less
+ * content) because the dark-to-light transition lands at an unpredictable
+ * scroll position, putting dark-on-light text over a still-dark background.
+ * Scoping each gradient to the zone that owns its text color keeps every
+ * section readable regardless of how tall its neighbors render, while the
+ * end color of each zone matches the start color of the next so the seams
+ * are invisible.
+ */
+.gradient-hero {
+  background: linear-gradient(
+    to bottom,
+    #081a2c 0%,
+    #0f2942 45%,
+    #123a52 80%,
+    #ddf1ec 100%
+  );
+}
+
+.gradient-mid {
+  background: linear-gradient(
+    to bottom,
+    #ddf1ec 0%,
+    #eef4f4 20%,
+    #eaf3f1 40%,
+    #eef2f6 60%,
+    #eaf3f3 80%,
+    #dbeeea 100%
+  );
+}
+
+.gradient-contact {
+  background: linear-gradient(
+    to bottom,
+    #dbeeea 0%,
+    #123a52 30%,
+    #0f2942 70%,
+    #081a2c 100%
+  );
+}
+
+.glass-card {
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid color-mix(in srgb, white 60%, var(--border));
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px color-mix(in srgb, var(--brand-teal) 35%, transparent);
+}

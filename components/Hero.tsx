@@ -1,4 +1,7 @@
 import { profile, stats } from "@/lib/data";
+import AnimatedNumber from "@/components/AnimatedNumber";
+import ParallaxGlow from "@/components/ParallaxGlow";
+import Reveal from "@/components/Reveal";
 
 function initials(name: string) {
   return name
@@ -12,10 +15,12 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="border-b border-border bg-gradient-to-b from-brand-navy to-brand-navy-dark text-white"
+      className="gradient-hero relative overflow-hidden text-white"
     >
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1fr_auto] md:items-center md:py-28">
-        <div>
+      <ParallaxGlow />
+
+      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-[1fr_auto] md:items-center md:py-28">
+        <Reveal>
           <p className="section-heading text-brand-teal-light">
             {profile.role}
           </p>
@@ -29,13 +34,13 @@ export default function Hero() {
           <div className="mt-8 flex flex-wrap gap-4">
             <a
               href="#projects"
-              className="rounded-full bg-brand-teal px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-teal-light"
+              className="rounded-full bg-brand-teal px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-brand-teal-light"
             >
               View Projects
             </a>
             <a
               href="#contact"
-              className="rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10"
+              className="rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition-all hover:scale-105 hover:bg-white/10"
             >
               Get in Touch
             </a>
@@ -46,20 +51,22 @@ export default function Hero() {
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
                 <dd className="text-3xl font-bold text-brand-teal-light">
-                  {stat.value}
+                  <AnimatedNumber value={stat.value} />
                 </dd>
                 <p className="mt-1 text-sm text-white/70">{stat.label}</p>
               </div>
             ))}
           </dl>
-        </div>
+        </Reveal>
 
-        <div
-          aria-hidden
-          className="flex h-40 w-40 items-center justify-center justify-self-center rounded-full border border-white/20 bg-white/5 text-4xl font-bold text-white md:h-56 md:w-56 md:text-6xl"
-        >
-          {initials(profile.name)}
-        </div>
+        <Reveal delay={150}>
+          <div
+            aria-hidden
+            className="flex h-40 w-40 items-center justify-center justify-self-center rounded-full border border-white/20 bg-white/5 text-4xl font-bold text-white transition-transform duration-500 hover:scale-105 md:h-56 md:w-56 md:text-6xl"
+          >
+            {initials(profile.name)}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
