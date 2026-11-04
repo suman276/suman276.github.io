@@ -1,18 +1,7 @@
 import { FolderGit2 } from "lucide-react";
-import { experience } from "@/lib/data";
+import { workspaceProjects } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
-import ProjectWorkspace, { type WorkspaceProject } from "@/components/ProjectWorkspace";
-
-const projects: WorkspaceProject[] = experience
-  .flatMap((job) =>
-    job.projects.map((project) => ({
-      ...project,
-      company: job.company.replace(" Pvt. Ltd.", ""),
-      engagement: job.role.includes("Pre-Sales") ? ("Pre-Sales" as const) : ("Delivery" as const),
-      role: project.role ?? job.role,
-    }))
-  )
-  .map((project, i) => ({ ...project, number: `PRJ${String(10001 + i).padStart(7, "0")}` }));
+import ProjectWorkspace from "@/components/ProjectWorkspace";
 
 export default function Projects() {
   return (
@@ -26,7 +15,7 @@ export default function Projects() {
         />
       </div>
       <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6">
-        <ProjectWorkspace projects={projects} />
+        <ProjectWorkspace projects={workspaceProjects} />
       </div>
     </section>
   );

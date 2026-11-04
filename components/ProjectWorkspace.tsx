@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 import {
   Bell,
   ChevronDown,
@@ -16,18 +16,11 @@ import {
   X,
 } from "lucide-react";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
+import type { WorkspaceProject } from "@/lib/data";
+import { scrollToId } from "@/lib/scroll";
 
-export type WorkspaceProject = {
-  number: string;
-  title: string;
-  client: string;
-  company: string;
-  engagement: "Delivery" | "Pre-Sales";
-  role: string;
-  metric: { value: string; label: string };
-  tags: string[];
-  points: string[];
-};
+/** Fired by the Virtual Agent to open a record here. `detail` is the record number. */
+export const OPEN_RECORD_EVENT = "workspace:open";
 
 const engagementStyle = {
   Delivery: "bg-sky-50 text-sky-700 ring-sky-200",
@@ -113,8 +106,27 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
     }
   };
 
+  // The Virtual Agent asks for a record by number: clear any filter hiding it,
+  // select it and bring the workspace into view.
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      const number = (e as CustomEvent<string>).detail;
+      if (!projects.some((p) => p.number === number)) return;
+      setQuery("");
+      setCompany("All");
+      setSelected(number);
+      record.current?.scrollTo({ top: 0 });
+      // Stacked layout: jump straight to the record, which sits below the list.
+      const stacked = window.matchMedia("(max-width: 1023px)").matches;
+      scrollToId(stacked ? "project-record" : "project-workspace");
+    };
+    window.addEventListener(OPEN_RECORD_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_RECORD_EVENT, onOpen);
+  }, [projects]);
+
   return (
     <div
+      id="project-workspace"
       data-reveal
       className="overflow-hidden rounded-2xl border border-border bg-surface text-[13px] shadow-2xl shadow-brand-navy/15"
     >
@@ -290,6 +302,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
             {/* Record */}
             <div
               ref={record}
+              id="project-record"
               data-lenis-prevent
               className="min-h-0 flex-1 scroll-mt-24 bg-background lg:overflow-auto"
             >

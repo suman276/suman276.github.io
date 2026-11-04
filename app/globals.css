@@ -130,3 +130,25 @@ body {
     display: none;
   }
 }
+
+/* Virtual Agent: messages and the teaser ease in. */
+@keyframes va-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.va-in {
+  animation: va-in 0.3s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .va-in {
+    animation: none;
+  }
+}

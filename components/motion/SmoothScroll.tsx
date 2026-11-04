@@ -4,12 +4,15 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { setLenis } from "@/lib/scroll";
 
 export default function SmoothScroll() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const lenis = new Lenis({ autoRaf: false, anchors: { offset: -80 } });
+    // Anchor targets already honour `scroll-padding-top` on <html>, so no extra offset.
+    const lenis = new Lenis({ autoRaf: false, anchors: true });
+    setLenis(lenis);
 
     // Drive Lenis from GSAP's ticker so ScrollTrigger and Lenis share one frame loop.
     lenis.on("scroll", ScrollTrigger.update);
@@ -20,6 +23,7 @@ export default function SmoothScroll() {
     return () => {
       gsap.ticker.remove(tick);
       gsap.ticker.lagSmoothing(500, 33);
+      setLenis(null);
       lenis.destroy();
     };
   }, []);

@@ -270,3 +270,22 @@ export const achievements = [
   "National Athlete — 1st Runner-Up, National Kho-Kho Championship",
   "Academic Excellence — 100% Scholarship, 3rd Rank in District (DPS Admission Exam)",
 ];
+
+export type WorkspaceProject = Project & {
+  number: string;
+  company: string;
+  engagement: "Delivery" | "Pre-Sales";
+  role: string;
+};
+
+/** Every project as a numbered record, shared by the Project Workspace and the Virtual Agent. */
+export const workspaceProjects: WorkspaceProject[] = experience
+  .flatMap((job) =>
+    job.projects.map((project) => ({
+      ...project,
+      company: job.company.replace(" Pvt. Ltd.", ""),
+      engagement: job.role.includes("Pre-Sales") ? ("Pre-Sales" as const) : ("Delivery" as const),
+      role: project.role ?? job.role,
+    }))
+  )
+  .map((project, i) => ({ ...project, number: `PRJ${String(10001 + i).padStart(7, "0")}` }));

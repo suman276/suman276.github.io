@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/motion/SmoothScroll";
 import Cursor from "@/components/motion/Cursor";
 import PageAnimations from "@/components/motion/PageAnimations";
+import VirtualAgent from "@/components/VirtualAgent";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
+      <VirtualAgent />
       <PageAnimations />
     </>
   );
