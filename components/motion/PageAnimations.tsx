@@ -31,7 +31,15 @@ function heroIntro() {
     .fromTo(
       "[data-hero='photo']",
       { autoAlpha: 0, clipPath: "inset(100% 0% 0% 0%)", scale: 1.08 },
-      { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 1.4, ease: "expo.out" },
+      {
+        autoAlpha: 1,
+        clipPath: "inset(0% 0% 0% 0%)",
+        scale: 1,
+        duration: 1.4,
+        ease: "expo.out",
+        // Drop the finished clip so the portrait's ring and shadow aren't cut off.
+        clearProps: "clipPath",
+      },
       0.2
     )
     .from("[data-hero='fade']", { autoAlpha: 0, y: 24, stagger: 0.1, duration: 0.9 }, 0.45)

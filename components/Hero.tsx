@@ -93,7 +93,28 @@ export default function Hero() {
             aria-hidden
             className="absolute inset-x-4 bottom-6 top-12 rounded-[42%_58%_55%_45%/48%_42%_58%_52%] bg-gradient-to-br from-brand-teal/30 via-sky-300/25 to-brand-sky/10"
           />
-          <div data-parallax="10" className="relative">
+          {/* Both themes share one slot, so the layout doesn't shift on toggle. */}
+          <div
+            data-parallax="10"
+            className="relative mx-auto flex aspect-[315/438] w-full max-w-[315px] items-center justify-center"
+          >
+            {/* Light mode: framed circular portrait */}
+            <div
+              data-hero="photo"
+              className="relative aspect-square w-full overflow-hidden rounded-full shadow-2xl shadow-shade/20 ring-[6px] ring-surface dark:hidden"
+            >
+              <Image
+                src="/images/profile-light.jpg"
+                alt="Suman Mondal"
+                fill
+                sizes="315px"
+                priority
+                // A hair of zoom keeps the source's black corners out of the anti-aliased edge.
+                className="scale-[1.02] object-cover"
+              />
+            </div>
+
+            {/* Dark mode: black-and-white cutout */}
             <Image
               data-hero="photo"
               src="/images/profile.webp"
@@ -101,7 +122,7 @@ export default function Hero() {
               width={315}
               height={438}
               priority
-              className="photo-fade relative mx-auto h-auto w-full max-w-[315px]"
+              className="photo-fade absolute inset-0 hidden h-full w-full object-contain dark:block"
             />
           </div>
 
