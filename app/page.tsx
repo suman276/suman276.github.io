@@ -27,7 +27,6 @@ export default function Home() {
         <Contact />
       </main>
       <Footer />
-      {/* Last, so its ScrollTriggers are created after the Projects pin and measure the pin's spacing. */}
       <PageAnimations />
     </>
   );

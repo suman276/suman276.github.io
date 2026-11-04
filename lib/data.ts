@@ -20,6 +20,7 @@ export const stats = [
 export type Project = {
   title: string;
   client: string;
+  role?: string;
   metric: { value: string; label: string };
   tags: string[];
   points: string[];
@@ -67,7 +68,7 @@ export const experience: Experience[] = [
       },
       {
         title: "Custom CSM Ticketing System",
-        client: "App Engine",
+        client: "Enterprise Client",
         metric: { value: "0", label: "additional CSM licences required" },
         tags: ["App Engine", "SLA Management", "Routing"],
         points: [
@@ -77,7 +78,7 @@ export const experience: Experience[] = [
       },
       {
         title: "Managed Services Lead",
-        client: "Post-Implementation Support",
+        client: "Enterprise Client",
         metric: { value: "6", label: "month managed services engagement" },
         tags: ["Governance", "Continuous Improvement"],
         points: [
@@ -88,7 +89,8 @@ export const experience: Experience[] = [
       },
       {
         title: "CMDB & Integration Engineering",
-        client: "Mueller Water Products (BAU Lead Developer)",
+        client: "Mueller Water Products",
+        role: "BAU Lead Developer",
         metric: { value: "2", label: "monitoring tools integrated into CMDB" },
         tags: ["CMDB", "IRE", "Automox", "Auvik"],
         points: [
