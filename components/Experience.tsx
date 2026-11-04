@@ -1,58 +1,61 @@
 import { Briefcase } from "lucide-react";
 import { experience } from "@/lib/data";
-import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 
 export default function Experience() {
   return (
-    <section id="experience" className="mx-auto max-w-6xl px-6 py-20">
-      <Reveal>
+    <section id="experience" className="border-y border-border bg-surface">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
         <SectionHeading
           icon={Briefcase}
           eyebrow="Experience"
-          title="Where I've Worked"
+          title="Where I've delivered."
         />
-      </Reveal>
 
-      <div className="mt-10 space-y-12 border-l border-border pl-8">
-        {experience.map((job, i) => (
-          <Reveal key={job.company} delay={i * 100}>
-            <div className="relative">
-              <span className="absolute -left-[calc(2rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full bg-brand-teal ring-4 ring-brand-teal/20" />
+        <div className="relative mt-16">
+          <div aria-hidden className="absolute bottom-2 left-[7px] top-2 w-px bg-border" />
+          <div
+            aria-hidden
+            data-draw
+            className="absolute bottom-2 left-[7px] top-2 w-px bg-gradient-to-b from-brand-teal to-brand-sky"
+          />
 
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h3 className="text-xl font-semibold text-brand-navy">
-                  {job.role}
-                </h3>
-                <span className="text-sm font-medium text-muted">
-                  {job.period}
-                </span>
-              </div>
-              <p className="text-sm font-medium text-brand-teal">
-                {job.company} · {job.location}
-              </p>
-
-              <p className="mt-4 max-w-3xl text-muted">{job.summary}</p>
-
-              <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-                {job.projects.map((project) => (
-                  <li
-                    key={project.title}
-                    className="flex items-start gap-2 text-sm text-muted"
-                  >
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-brand-teal" />
-                    <span>
-                      <span className="font-medium text-foreground">
-                        {project.title}
-                      </span>{" "}
-                      — {project.client}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        ))}
+          <div className="space-y-16">
+            {experience.map((job) => (
+              <article key={job.company} className="relative pl-12">
+                <span
+                  aria-hidden
+                  className="absolute left-0 top-1.5 h-[15px] w-[15px] rounded-full border-[3px] border-surface bg-brand-teal ring-4 ring-brand-teal/15"
+                />
+                <div data-reveal className="grid gap-8 lg:grid-cols-[260px_1fr]">
+                  <div>
+                    <p className="font-mono text-xs font-medium uppercase tracking-wider text-brand-teal">
+                      {job.period}
+                    </p>
+                    <h3 className="mt-2 text-xl font-semibold text-brand-navy">{job.role}</h3>
+                    <p className="mt-1 text-sm font-medium text-muted">
+                      {job.company} · {job.location}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="leading-relaxed text-muted">{job.summary}</p>
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {job.projects.map((project) => (
+                        <li
+                          key={project.title}
+                          className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-brand-navy"
+                        >
+                          {project.title}
+                          <span className="text-muted"> · {project.client}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

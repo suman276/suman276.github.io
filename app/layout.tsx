@@ -18,12 +18,20 @@ export const metadata: Metadata = {
     "Portfolio of Suman Mondal, a ServiceNow Consultant and Developer specializing in ITSM, CMDB, HAM/SAM, App Engine, and AI-powered workflows.",
 };
 
+// Runs before first paint. If JS never finishes booting (e.g. a script fails
+// to load), the timeout un-hides content so the page is never left blank.
+const motionScript = `(function(){var d=document.documentElement;if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('motion');setTimeout(function(){if(!d.classList.contains('motion-ready'))d.classList.remove('motion')},4000)})()`;
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: motionScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>

@@ -17,17 +17,21 @@ export const stats = [
   { value: "25+", label: "Sites/plants deployed to" },
 ];
 
+export type Project = {
+  title: string;
+  client: string;
+  metric: { value: string; label: string };
+  tags: string[];
+  points: string[];
+};
+
 export type Experience = {
   company: string;
   role: string;
   location: string;
   period: string;
   summary: string;
-  projects: {
-    title: string;
-    client: string;
-    points: string[];
-  }[];
+  projects: Project[];
 };
 
 export const experience: Experience[] = [
@@ -42,6 +46,8 @@ export const experience: Experience[] = [
       {
         title: "Logbook Digitisation",
         client: "Dr. Reddy's Laboratories (DRL)",
+        metric: { value: "25", label: "manufacturing plants live pan-India" },
+        tags: ["App Engine", "Flow Designer", "Audit Trails"],
         points: [
           "Designed and delivered a fully paperless SOP management system deployed across 25 manufacturing plants pan-India, eliminating manual logbook processes and reducing compliance risk",
           "Automated recurring monthly activity creation, generic assignment generation, and audit trails — cutting manual effort and human error significantly",
@@ -51,6 +57,8 @@ export const experience: Experience[] = [
       {
         title: "Approval Digitisation & Transformation",
         client: "Enterprise Client",
+        metric: { value: "40", label: "approval hierarchy levels, configured without code" },
+        tags: ["No-code Routing", "Approvals", "Workflow"],
         points: [
           "Architected a code-less Routing Identification System (RIS) enabling dynamic, multi-level approval workflows configurable without developer intervention",
           "Supported approval, rejection, and refer-back flows with auto-generated approval chains scaling up to 40 hierarchy levels",
@@ -60,6 +68,8 @@ export const experience: Experience[] = [
       {
         title: "Custom CSM Ticketing System",
         client: "App Engine",
+        metric: { value: "0", label: "additional CSM licences required" },
+        tags: ["App Engine", "SLA Management", "Routing"],
         points: [
           "Designed a cost-effective, App Engine-native customer ticketing system replicating core CSM capabilities without additional CSM licensing — delivering measurable license cost savings",
           "Built dynamic flow-based routing and SLA management to ensure consistent customer response standards",
@@ -68,6 +78,8 @@ export const experience: Experience[] = [
       {
         title: "Managed Services Lead",
         client: "Post-Implementation Support",
+        metric: { value: "6", label: "month managed services engagement" },
+        tags: ["Governance", "Continuous Improvement"],
         points: [
           "Led a 6-month managed services engagement as primary point of contact for governance, issue resolution, and continuous improvement",
           "Conducted daily operational calls and monthly workflow review sessions, proactively resolving platform issues before business impact",
@@ -77,6 +89,8 @@ export const experience: Experience[] = [
       {
         title: "CMDB & Integration Engineering",
         client: "Mueller Water Products (BAU Lead Developer)",
+        metric: { value: "2", label: "monitoring tools integrated into CMDB" },
+        tags: ["CMDB", "IRE", "Automox", "Auvik"],
         points: [
           "Integrated Automox with ServiceNow to automate endpoint discovery and software inventory population into CMDB",
           "Configured Auvik integration for network event and alert ingestion, reducing mean time to detect (MTTD) for network anomalies",
@@ -97,6 +111,8 @@ export const experience: Experience[] = [
       {
         title: "DocIntel — AI-Powered Invoice Automation",
         client: "Pernod Ricard India",
+        metric: { value: "3", label: "critical invoice fields auto-validated" },
+        tags: ["App Engine", "AI/ML OCR", "Vendor Portal"],
         points: [
           "Designed and demonstrated an AI/ML OCR-based document intelligence solution on ServiceNow App Engine, automating end-to-end invoice handling and vendor portal management",
           "Built automated validation logic for PO numbers, GST, and compliance data — eliminating manual verification effort",
@@ -106,6 +122,8 @@ export const experience: Experience[] = [
       {
         title: "NOW Assist Event Priority Handler",
         client: "Adani Enterprise",
+        metric: { value: "GenAI", label: "event triage with no custom model" },
+        tags: ["NOW Assist", "LLM", "NLP"],
         points: [
           "Architected an NLP + ServiceNow LLM-powered event prioritization solution using NOW Assist (GenAI capabilities)",
           "Enabled codeless, AI-driven triage of major events — reducing manual system triage effort and accelerating incident response",
@@ -115,6 +133,8 @@ export const experience: Experience[] = [
       {
         title: "Discovery & Asset Management POC",
         client: "JKCL Manufacturing",
+        metric: { value: "40%", label: "improvement in CMDB accuracy in 12 days" },
+        tags: ["Discovery", "HAM", "SAM"],
         points: [
           "Delivered a fully functional Discovery and Asset Management POC across 2 manufacturing locations and a central office in just 12 days",
           "Competed directly against the client's incumbent tool and demonstrated a 40% improvement in CMDB accuracy",
@@ -124,6 +144,8 @@ export const experience: Experience[] = [
       {
         title: "Software Asset Management & Discovery",
         client: "SLK Software",
+        metric: { value: "Real-time", label: "software inventory and compliance" },
+        tags: ["Microsoft Intune", "Discovery", "ACC"],
         points: [
           "Automated end-to-end software distribution by integrating Microsoft Intune with ServiceNow Discovery and Agent Client Collector (ACC)",
           "Enabled real-time software inventory visibility and compliance tracking, reducing manual IT overhead",
@@ -132,6 +154,8 @@ export const experience: Experience[] = [
       {
         title: "HR Service Desk & Catalog Automation",
         client: "Adani Airports",
+        metric: { value: "4", label: "HR processes digitised end-to-end" },
+        tags: ["HRSD", "Service Catalog"],
         points: [
           "Designed and delivered HRSD catalog workflows covering Onboarding, Offboarding, POSH compliance, and Anti-Harassment processes",
           "Standardized and digitized HR service delivery, reducing dependency on manual HR coordination and improving employee experience at scale",
