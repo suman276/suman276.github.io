@@ -5,6 +5,11 @@ import { gsap, useGSAP, FINE_POINTER, MOTION_OK } from "@/lib/gsap";
 
 type State = "idle" | "link" | "label";
 
+// Read at tween time so the ring matches whichever theme is active.
+const idleRing = () =>
+  getComputedStyle(document.documentElement).getPropertyValue("--cursor-ring").trim() ||
+  "rgba(15, 41, 66, 0.35)";
+
 export default function Cursor() {
   const ring = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLSpanElement>(null);
@@ -38,7 +43,7 @@ export default function Cursor() {
                 ? "rgba(14, 147, 132, 0.12)"
                 : "rgba(14, 147, 132, 0)",
           borderColor:
-            next === "idle" ? "rgba(15, 41, 66, 0.35)" : "rgba(14, 147, 132, 0.6)",
+            next === "idle" ? idleRing() : "rgba(14, 147, 132, 0.6)",
           duration: 0.35,
           ease: "power3.out",
         });
@@ -82,7 +87,7 @@ export default function Cursor() {
     <div
       ref={ring}
       aria-hidden
-      className="pointer-events-none invisible fixed left-0 top-0 z-[100] flex h-8 w-8 items-center justify-center rounded-full border border-brand-navy/35 opacity-0"
+      className="pointer-events-none invisible fixed left-0 top-0 z-[100] flex h-8 w-8 items-center justify-center rounded-full border border-[var(--cursor-ring)] opacity-0"
     >
       <span
         ref={label}

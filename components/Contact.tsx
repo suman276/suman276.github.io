@@ -7,7 +7,7 @@ import Magnetic from "@/components/motion/Magnetic";
 export default function Contact() {
   return (
     <section id="contact" className="px-4 pb-24 sm:px-6">
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-brand-navy px-6 py-20 text-white sm:px-16 lg:py-28">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-panel px-6 py-20 text-white sm:px-16 lg:py-28">
         <div aria-hidden className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-brand-teal/30 blur-3xl" />
         <div aria-hidden className="pointer-events-none absolute -bottom-32 right-0 h-96 w-96 rounded-full bg-sky-500/20 blur-3xl" />
 

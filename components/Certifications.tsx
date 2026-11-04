@@ -14,7 +14,7 @@ export default function Certifications() {
         />
 
         <div className="mt-14 grid grid-flow-row-dense gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <TiltCard className="border-transparent bg-brand-navy p-8 text-white sm:col-span-2 lg:row-span-2">
+          <TiltCard className="border-transparent bg-panel p-8 text-white sm:col-span-2 lg:row-span-2">
             <div
               aria-hidden
               className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-teal/30 blur-3xl"

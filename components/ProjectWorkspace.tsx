@@ -23,8 +23,10 @@ import { scrollToId } from "@/lib/scroll";
 export const OPEN_RECORD_EVENT = "workspace:open";
 
 const engagementStyle = {
-  Delivery: "bg-sky-50 text-sky-700 ring-sky-200",
-  "Pre-Sales": "bg-amber-50 text-amber-700 ring-amber-200",
+  Delivery:
+    "bg-sky-50 text-sky-700 ring-sky-200 dark:bg-sky-400/10 dark:text-sky-300 dark:ring-sky-400/25",
+  "Pre-Sales":
+    "bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-400/10 dark:text-amber-300 dark:ring-amber-400/25",
 };
 
 function Pill({ children, className }: { children: ReactNode; className: string }) {
@@ -128,7 +130,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
     <div
       id="project-workspace"
       data-reveal
-      className="overflow-hidden rounded-2xl border border-border bg-surface text-[13px] shadow-2xl shadow-brand-navy/15"
+      className="overflow-hidden rounded-2xl border border-border bg-surface text-[13px] shadow-2xl shadow-shade/15"
     >
       {/* Unified navigation */}
       <div className="flex h-12 items-center gap-3 bg-brand-navy-dark px-3 text-white/75">
@@ -231,7 +233,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                       onClick={() => setCompany(c)}
                       className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
                         company === c
-                          ? "bg-brand-navy text-white"
+                          ? "bg-primary text-on-primary"
                           : "bg-surface-alt text-muted hover:text-brand-navy"
                       }`}
                     >
@@ -317,7 +319,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                   </h3>
                   <div className="flex gap-2">
                     <Pill className={engagementStyle[current.engagement]}>{current.engagement}</Pill>
-                    <Pill className="bg-emerald-50 text-emerald-700 ring-emerald-200">
+                    <Pill className="bg-emerald-50 text-emerald-700 ring-emerald-200 dark:bg-emerald-400/10 dark:text-emerald-300 dark:ring-emerald-400/25">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                       Delivered
                     </Pill>
@@ -355,7 +357,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                   <ol className="space-y-3">
                     {current.points.map((point, i) => (
                       <li key={point} className="flex gap-3">
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-navy text-[10px] font-bold text-white">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-panel text-[10px] font-bold text-white">
                           SM
                         </span>
                         <div className="flex-1 rounded-lg border border-border bg-background px-3 py-2">

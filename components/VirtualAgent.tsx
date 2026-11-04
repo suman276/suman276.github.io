@@ -135,7 +135,7 @@ export default function VirtualAgent() {
     <>
       {/* Teaser bubble */}
       {teaser && !open && (
-        <div className="va-in fixed bottom-24 right-5 z-[60] flex max-w-[260px] items-start gap-2 rounded-2xl rounded-br-md border border-border bg-surface p-3 pr-2 text-[13px] text-brand-navy shadow-xl shadow-brand-navy/10">
+        <div className="va-in fixed bottom-24 right-5 z-[60] flex max-w-[260px] items-start gap-2 rounded-2xl rounded-br-md border border-border bg-surface p-3 pr-2 text-[13px] text-brand-navy shadow-xl shadow-shade/10">
           <button type="button" onClick={toggle} className="text-left leading-snug">
             <span className="font-semibold">Hi! Questions about Suman&apos;s work?</span>{" "}
             <span className="text-muted">Ask the Virtual Agent.</span>
@@ -159,13 +159,13 @@ export default function VirtualAgent() {
         aria-expanded={open}
         aria-controls="virtual-agent"
         aria-label={open ? "Close Virtual Agent" : "Open Virtual Agent"}
-        className={`fixed bottom-5 right-5 z-[60] h-14 w-14 items-center justify-center rounded-full bg-brand-navy text-white shadow-xl shadow-brand-navy/25 transition-transform hover:scale-105 hover:bg-brand-navy-dark ${
+        className={`fixed bottom-5 right-5 z-[60] h-14 w-14 items-center justify-center rounded-full bg-primary text-on-primary shadow-xl shadow-shade/25 transition-transform hover:scale-105 hover:bg-primary-hover ${
           open ? "hidden sm:flex" : "flex"
         }`}
       >
         {open ? <X className="h-6 w-6" /> : <BotMessageSquare className="h-6 w-6" />}
         {!open && (
-          <span className="absolute right-0.5 top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-brand-teal-light" />
+          <span className="absolute right-0.5 top-0.5 h-3.5 w-3.5 rounded-full border-2 border-surface bg-brand-teal-light" />
         )}
       </button>
 
@@ -175,7 +175,7 @@ export default function VirtualAgent() {
         role="dialog"
         aria-label="Virtual Agent"
         inert={!open}
-        className={`fixed inset-0 z-[60] flex flex-col overflow-hidden bg-surface text-[13px] shadow-2xl shadow-brand-navy/25 transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none sm:inset-auto sm:bottom-24 sm:right-5 sm:h-[min(640px,calc(100dvh-8rem))] sm:w-[384px] sm:origin-bottom-right sm:rounded-2xl sm:border sm:border-border ${
+        className={`fixed inset-0 z-[60] flex flex-col overflow-hidden bg-surface text-[13px] shadow-2xl shadow-shade/25 transition-[opacity,transform,visibility] duration-300 ease-out motion-reduce:transition-none sm:inset-auto sm:bottom-24 sm:right-5 sm:h-[min(640px,calc(100dvh-8rem))] sm:w-[384px] sm:origin-bottom-right sm:rounded-2xl sm:border sm:border-border ${
           open ? "visible opacity-100" : "invisible translate-y-4 opacity-0 sm:scale-95"
         }`}
       >
@@ -219,7 +219,7 @@ export default function VirtualAgent() {
           {messages.map((m) =>
             m.from === "user" ? (
               <div key={m.id} className="va-in flex justify-end">
-                <p className="max-w-[80%] rounded-2xl rounded-tr-md bg-brand-navy px-3.5 py-2 leading-relaxed text-white">
+                <p className="max-w-[80%] rounded-2xl rounded-tr-md bg-primary px-3.5 py-2 leading-relaxed text-on-primary">
                   {m.text}
                 </p>
               </div>
@@ -410,7 +410,7 @@ function BotMessage({
 
 function ActionButton({ action: a, onAction }: { action: AgentAction; onAction: (id: string) => void }) {
   const className =
-    "inline-flex items-center gap-1 rounded-lg bg-brand-navy px-3 py-1.5 text-[12px] font-semibold text-white transition-colors hover:bg-brand-navy-dark";
+    "inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-[12px] font-semibold text-on-primary transition-colors hover:bg-primary-hover";
   if (a.kind === "section") {
     return (
       <button type="button" onClick={() => onAction(a.id)} className={className}>

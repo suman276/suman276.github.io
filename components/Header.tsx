@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Download } from "lucide-react";
 import { profile } from "@/lib/data";
 import { gsap, useGSAP } from "@/lib/gsap";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const links = [
   { href: "#about", label: "About" },
@@ -48,8 +49,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-surface/75 backdrop-blur-xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3.5">
-        <a href="#top" className="flex items-center gap-2.5 font-semibold tracking-tight text-brand-navy">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-navy text-xs font-bold text-white">
+        <a href="#top" className="flex items-center gap-2.5 whitespace-nowrap font-semibold tracking-tight text-brand-navy">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-panel text-xs font-bold text-white">
             SM
           </span>
           {profile.name}
@@ -60,7 +61,7 @@ export default function Header() {
             <a
               key={link.href}
               href={link.href}
-              className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-full px-3 py-1.5 text-sm font-medium lg:px-3.5 transition-colors ${
                 active === link.href
                   ? "bg-brand-navy/[0.06] text-brand-navy"
                   : "text-muted hover:text-brand-navy"
@@ -71,28 +72,31 @@ export default function Header() {
           ))}
         </nav>
 
-        <a
-          href="/resume.pdf"
-          download
-          className="hidden items-center gap-2 rounded-full bg-brand-navy px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-navy-dark md:inline-flex"
-        >
-          <Download className="h-4 w-4" />
-          Resume
-        </a>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <a
+            href="/resume.pdf"
+            download
+            className="hidden items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-on-primary transition-colors hover:bg-primary-hover lg:inline-flex"
+          >
+            <Download className="h-4 w-4" />
+            Resume
+          </a>
 
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-          aria-expanded={open}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-border md:hidden"
-        >
-          <div className="space-y-1.5">
-            <span className={`block h-0.5 w-5 bg-brand-navy transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
-            <span className={`block h-0.5 w-5 bg-brand-navy transition-opacity ${open ? "opacity-0" : ""}`} />
-            <span className={`block h-0.5 w-5 bg-brand-navy transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
-          </div>
-        </button>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+            aria-expanded={open}
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border md:hidden"
+          >
+            <div className="space-y-1.5">
+              <span className={`block h-0.5 w-5 bg-brand-navy transition-transform ${open ? "translate-y-2 rotate-45" : ""}`} />
+              <span className={`block h-0.5 w-5 bg-brand-navy transition-opacity ${open ? "opacity-0" : ""}`} />
+              <span className={`block h-0.5 w-5 bg-brand-navy transition-transform ${open ? "-translate-y-2 -rotate-45" : ""}`} />
+            </div>
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -115,7 +119,7 @@ export default function Header() {
               <a
                 href="/resume.pdf"
                 download
-                className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-5 py-2 text-sm font-semibold text-white"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-on-primary"
               >
                 <Download className="h-4 w-4" />
                 Download resume

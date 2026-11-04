@@ -68,7 +68,7 @@ export default function Hero() {
             <Magnetic>
               <a
                 href="#projects"
-                className="group inline-flex items-center gap-2 rounded-full bg-brand-navy px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-navy/20 transition-colors hover:bg-brand-navy-dark"
+                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-on-primary shadow-lg shadow-shade/20 transition-colors hover:bg-primary-hover"
               >
                 View projects
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -91,7 +91,7 @@ export default function Hero() {
           <div
             data-hero="blob"
             aria-hidden
-            className="absolute inset-x-4 bottom-6 top-12 rounded-[42%_58%_55%_45%/48%_42%_58%_52%] bg-gradient-to-br from-brand-teal/30 via-sky-300/25 to-brand-navy/10"
+            className="absolute inset-x-4 bottom-6 top-12 rounded-[42%_58%_55%_45%/48%_42%_58%_52%] bg-gradient-to-br from-brand-teal/30 via-sky-300/25 to-brand-sky/10"
           />
           <div data-parallax="10" className="relative">
             <Image
@@ -109,7 +109,7 @@ export default function Hero() {
             <div key={text} data-hero="badge" className={`absolute ${className}`}>
               <div
                 data-float
-                className="flex items-center gap-2 rounded-xl border border-border bg-surface/90 px-3 py-2 text-xs font-semibold text-brand-navy shadow-lg shadow-brand-navy/10 backdrop-blur"
+                className="flex items-center gap-2 rounded-xl border border-border bg-surface/90 px-3 py-2 text-xs font-semibold text-brand-navy shadow-lg shadow-shade/10 backdrop-blur"
               >
                 <Icon className="h-4 w-4 text-brand-teal" />
                 {text}

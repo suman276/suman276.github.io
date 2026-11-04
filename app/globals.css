@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
+/* `dark:` utilities follow the site's own theme switch, not only the OS setting. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
+  color-scheme: light;
   --background: #f7f9fb;
   --foreground: #0f2942;
   --surface: #ffffff;
@@ -8,11 +12,46 @@
   --border: #dde4ea;
   --muted: #5b6b7a;
 
+  /* `brand-navy` is the ink colour for text and fine lines. */
   --brand-navy: #0f2942;
   --brand-navy-dark: #081a2c;
   --brand-teal: #0e9384;
   --brand-teal-light: #14b8a6;
   --brand-sky: #0284c7;
+
+  /* Solid buttons: navy in light mode, inverted to near-white in dark mode. */
+  --primary: #0f2942;
+  --primary-hover: #081a2c;
+  --on-primary: #ffffff;
+  /* Large navy surfaces with white text (contact panel, featured cards). */
+  --panel: #0f2942;
+  /* Shadow tint. */
+  --shade: #0f2942;
+  --cursor-ring: rgb(15 41 66 / 0.35);
+}
+
+/* Dark theme. The inline script in layout.tsx sets data-theme before first paint. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0a1420;
+  --foreground: #e3ebf3;
+  --surface: #101d2b;
+  --surface-alt: #162637;
+  --border: #22374b;
+  --muted: #8ea2b5;
+
+  --brand-navy: #e3ebf3;
+  --brand-navy-dark: #050d16;
+  --brand-teal: #0e9384;
+  --brand-teal-light: #2dd4bf;
+  --brand-sky: #38bdf8;
+
+  --primary: #e3ebf3;
+  --primary-hover: #ffffff;
+  --on-primary: #0a1420;
+  --panel: #12304d;
+  --shade: #000000;
+  --cursor-ring: rgb(227 235 243 / 0.4);
 }
 
 @theme inline {
@@ -27,6 +66,11 @@
   --color-brand-teal: var(--brand-teal);
   --color-brand-teal-light: var(--brand-teal-light);
   --color-brand-sky: var(--brand-sky);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-panel: var(--panel);
+  --color-shade: var(--shade);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -55,6 +99,16 @@ body {
 .motion [data-hero-name],
 .motion [data-split] {
   visibility: hidden;
+}
+
+/*
+ * Theme switch: the new theme grows as a circle out of the toggle (View
+ * Transitions API). Browsers without it, or with reduced motion, just swap.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
 @layer components {
@@ -92,7 +146,7 @@ body {
     border-radius: 1.25rem;
     background: var(--surface);
     border: 1px solid var(--border);
-    box-shadow: 0 1px 2px rgb(15 41 66 / 0.04);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--shade) 4%, transparent);
     will-change: transform;
     transition:
       box-shadow 0.35s ease,
@@ -115,7 +169,7 @@ body {
 
   .bento-card:hover {
     border-color: color-mix(in srgb, var(--brand-teal) 35%, var(--border));
-    box-shadow: 0 28px 50px -28px rgb(15 41 66 / 0.28);
+    box-shadow: 0 28px 50px -28px color-mix(in srgb, var(--shade) 28%, transparent);
   }
 
   .bento-card:hover::before {
