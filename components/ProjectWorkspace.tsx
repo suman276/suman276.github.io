@@ -1,7 +1,8 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useMemo, useRef, useState } from "react";
 import {
+  ArrowUpRight,
   Bell,
   ChevronDown,
   Globe,
@@ -17,10 +18,7 @@ import {
 } from "lucide-react";
 import { gsap, useGSAP, MOTION_OK } from "@/lib/gsap";
 import type { WorkspaceProject } from "@/lib/data";
-import { scrollToId } from "@/lib/scroll";
 
-/** Fired by the Virtual Agent to open a record here. `detail` is the record number. */
-export const OPEN_RECORD_EVENT = "workspace:open";
 
 const engagementStyle = {
   Delivery:
@@ -43,7 +41,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
       <dt className="text-[11px] font-medium text-muted">{label}</dt>
-      <dd className="mt-1 flex min-h-[34px] items-center rounded-md border border-border bg-surface-alt/70 px-2.5 py-1.5 text-[13px] text-brand-navy">
+      <dd className="mt-1 flex min-h-[34px] items-center rounded-md border border-border bg-surface-alt/70 px-2.5 py-1.5 text-[13px] text-ink">
         {children}
       </dd>
     </div>
@@ -53,7 +51,7 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 function FormSection({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section data-record-anim className="rounded-lg border border-border bg-surface">
-      <h4 className="flex items-center gap-1.5 border-b border-border px-4 py-2.5 text-[13px] font-semibold text-brand-navy">
+      <h4 className="flex items-center gap-1.5 border-b border-border px-4 py-2.5 text-[13px] font-semibold text-ink">
         <ChevronDown className="h-3.5 w-3.5 text-muted" />
         {title}
       </h4>
@@ -62,7 +60,14 @@ function FormSection({ title, children }: { title: string; children: ReactNode }
   );
 }
 
-export default function ProjectWorkspace({ projects }: { projects: WorkspaceProject[] }) {
+export default function ProjectWorkspace({
+  projects,
+  onOpenCase,
+}: {
+  projects: WorkspaceProject[];
+  /** Opens the full case study for a record (by slug). */
+  onOpenCase?: (slug: string) => void;
+}) {
   const [selected, setSelected] = useState(projects[0].number);
   const [query, setQuery] = useState("");
   const [company, setCompany] = useState("All");
@@ -108,35 +113,16 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
     }
   };
 
-  // The Virtual Agent asks for a record by number: clear any filter hiding it,
-  // select it and bring the workspace into view.
-  useEffect(() => {
-    const onOpen = (e: Event) => {
-      const number = (e as CustomEvent<string>).detail;
-      if (!projects.some((p) => p.number === number)) return;
-      setQuery("");
-      setCompany("All");
-      setSelected(number);
-      record.current?.scrollTo({ top: 0 });
-      // Stacked layout: jump straight to the record, which sits below the list.
-      const stacked = window.matchMedia("(max-width: 1023px)").matches;
-      scrollToId(stacked ? "project-record" : "project-workspace");
-    };
-    window.addEventListener(OPEN_RECORD_EVENT, onOpen);
-    return () => window.removeEventListener(OPEN_RECORD_EVENT, onOpen);
-  }, [projects]);
-
   return (
     <div
       id="project-workspace"
-      data-reveal
       className="overflow-hidden rounded-2xl border border-border bg-surface text-[13px] shadow-2xl shadow-shade/15"
     >
       {/* Unified navigation */}
-      <div className="flex h-12 items-center gap-3 bg-brand-navy-dark px-3 text-white/75">
+      <div className="flex h-12 items-center gap-3 bg-chrome px-3 text-white/75">
         <Menu className="h-4 w-4 shrink-0" />
         <span className="flex shrink-0 items-center gap-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded bg-brand-teal text-[10px] font-bold text-white">
+          <span className="flex h-6 w-6 items-center justify-center rounded bg-accent text-[10px] font-bold text-white">
             SM
           </span>
           <span className="hidden font-semibold text-white sm:inline">Portfolio</span>
@@ -151,7 +137,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
         </nav>
         <span className="hidden shrink-0 items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1 text-xs font-medium text-white lg:flex">
           Project Workspace
-          <Star className="h-3 w-3 fill-brand-teal-light text-brand-teal-light" />
+          <Star className="h-3 w-3 fill-accent-bright text-accent-bright" />
         </span>
 
         <label className="relative ml-auto w-full max-w-xs">
@@ -162,7 +148,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search projects, clients, tech"
-            className="h-8 w-full rounded-md border border-white/15 bg-white/10 pl-8 pr-3 text-xs text-white placeholder:text-white/45 focus:border-brand-teal-light focus:outline-none"
+            className="h-8 w-full rounded-md border border-white/15 bg-white/10 pl-8 pr-3 text-xs text-white placeholder:text-white/45 focus:border-accent-bright focus:outline-none"
           />
         </label>
 
@@ -170,7 +156,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
           <Globe className="h-4 w-4" />
           <span className="relative">
             <Bell className="h-4 w-4" />
-            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-brand-teal-light" />
+            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-accent-bright" />
           </span>
           <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15 text-[10px] font-bold text-white">
             SM
@@ -188,11 +174,11 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
             <span
               key={i}
               className={`relative flex h-10 w-10 items-center justify-center rounded-lg ${
-                i === 1 ? "bg-surface text-brand-teal shadow-sm" : ""
+                i === 1 ? "bg-surface text-accent shadow-sm" : ""
               }`}
             >
               {i === 1 && (
-                <span className="absolute -left-2 top-2 h-6 w-[3px] rounded-r bg-brand-teal" />
+                <span className="absolute -left-2 top-2 h-6 w-[3px] rounded-r bg-accent" />
               )}
               <Icon className="h-[18px] w-[18px]" />
             </span>
@@ -206,8 +192,8 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
               <List className="h-3.5 w-3.5" />
               Projects
             </span>
-            <span className="flex h-8 min-w-0 items-center gap-2 rounded-t-md border border-b-0 border-border bg-surface px-3 text-xs font-semibold text-brand-navy">
-              <span className="font-mono text-brand-teal">{current.number}</span>
+            <span className="flex h-8 min-w-0 items-center gap-2 rounded-t-md border border-b-0 border-border bg-surface px-3 text-xs font-semibold text-ink">
+              <span className="font-mono text-accent">{current.number}</span>
               <span className="hidden truncate sm:inline">{current.title}</span>
               <X aria-hidden className="h-3 w-3 shrink-0 text-muted" />
             </span>
@@ -219,7 +205,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
                 <div className="flex items-center gap-2">
                   <ListFilter className="h-4 w-4 text-muted" />
-                  <h3 className="font-semibold text-brand-navy">All projects</h3>
+                  <h3 className="font-semibold text-ink">All projects</h3>
                   <span className="rounded bg-surface-alt px-1.5 py-0.5 text-[11px] font-medium text-muted">
                     {filtered.length}
                   </span>
@@ -234,7 +220,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                       className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
                         company === c
                           ? "bg-primary text-on-primary"
-                          : "bg-surface-alt text-muted hover:text-brand-navy"
+                          : "bg-surface-alt text-muted hover:text-ink"
                       }`}
                     >
                       {c}
@@ -262,7 +248,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                           onClick={() => open(p.number)}
                           className={`cursor-pointer border-b border-border/70 transition-colors ${
                             active
-                              ? "bg-brand-teal/[0.07] shadow-[inset_3px_0_0_var(--brand-teal)]"
+                              ? "bg-accent/[0.07] shadow-[inset_3px_0_0_var(--accent)]"
                               : "hover:bg-surface-alt/60"
                           }`}
                         >
@@ -274,13 +260,13 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                                 open(p.number);
                               }}
                               aria-current={active ? "true" : undefined}
-                              className="font-mono text-[12px] text-brand-sky underline-offset-2 hover:underline"
+                              className="font-mono text-[12px] text-accent-2 underline-offset-2 hover:underline"
                             >
                               {p.number}
                             </button>
                           </td>
                           <td className="py-2.5 pr-2">
-                            <p className="line-clamp-1 font-medium text-brand-navy">{p.title}</p>
+                            <p className="line-clamp-1 font-medium text-ink">{p.title}</p>
                             <p className="line-clamp-1 text-[11px] text-muted">{p.client}</p>
                           </td>
                           <td className="hidden py-2.5 pr-4 align-top sm:table-cell">
@@ -314,7 +300,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                   <span className="font-mono">{current.number}</span>
                 </p>
                 <div className="mt-1 flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="text-lg font-semibold leading-snug text-brand-navy">
+                  <h3 className="text-lg font-semibold leading-snug text-ink">
                     {current.title}
                   </h3>
                   <div className="flex gap-2">
@@ -325,17 +311,27 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                     </Pill>
                   </div>
                 </div>
+                {onOpenCase && (
+                  <button
+                    type="button"
+                    onClick={() => onOpenCase(current.slug)}
+                    className="mt-3 inline-flex items-center gap-1.5 rounded-md border border-accent/40 bg-accent/10 px-2.5 py-1 text-xs font-semibold text-accent transition-colors hover:bg-accent/15"
+                  >
+                    View case study
+                    <ArrowUpRight aria-hidden className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </div>
 
               <div className="space-y-4 p-4 sm:p-5">
                 <div
                   data-record-anim
-                  className="flex items-center gap-4 rounded-lg border border-brand-teal/25 bg-gradient-to-r from-brand-teal/[0.08] to-transparent px-4 py-3"
+                  className="flex items-center gap-4 rounded-lg border border-accent/25 bg-gradient-to-r from-accent/[0.08] to-transparent px-4 py-3"
                 >
                   <span className="text-gradient text-3xl font-semibold tracking-tight">
                     {current.metric.value}
                   </span>
-                  <span className="text-[13px] leading-snug text-brand-navy">
+                  <span className="text-[13px] leading-snug text-ink">
                     {current.metric.label}
                   </span>
                 </div>
@@ -362,10 +358,10 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                         </span>
                         <div className="flex-1 rounded-lg border border-border bg-background px-3 py-2">
                           <p className="text-[11px] text-muted">
-                            <span className="font-semibold text-brand-navy">Suman Mondal</span>
+                            <span className="font-semibold text-ink">Suman Mondal</span>
                             {" · "}Outcome {i + 1}
                           </p>
-                          <p className="mt-0.5 leading-relaxed text-brand-navy/85">{point}</p>
+                          <p className="mt-0.5 leading-relaxed text-ink/85">{point}</p>
                         </div>
                       </li>
                     ))}
@@ -377,7 +373,7 @@ export default function ProjectWorkspace({ projects }: { projects: WorkspaceProj
                     {current.tags.map((tag) => (
                       <li
                         key={tag}
-                        className="rounded-md border border-border bg-background px-2 py-1 font-mono text-[11px] text-brand-navy/80"
+                        className="rounded-md border border-border bg-background px-2 py-1 font-mono text-[11px] text-ink/80"
                       >
                         {tag}
                       </li>

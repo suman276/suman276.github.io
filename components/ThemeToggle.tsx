@@ -27,7 +27,7 @@ export default function ThemeToggle() {
     try {
       seen = localStorage.getItem(HINT_KEY) === "1";
     } catch {}
-    if (seen || isDark()) return;
+    if (seen) return;
     const show = window.setTimeout(() => setHint(true), 1800);
     const hide = window.setTimeout(() => dismissHint(), 11000);
     return () => {
@@ -84,37 +84,41 @@ export default function ThemeToggle() {
         aria-label="Dark mode"
         title={label}
         onClick={toggle}
-        className="relative flex h-7 w-[52px] shrink-0 items-center rounded-full border border-border bg-surface-alt p-0.5 transition-colors hover:border-brand-teal/50 dark:bg-brand-teal/20"
+        className="relative flex h-7 w-[52px] shrink-0 items-center rounded-full border border-border bg-surface-alt p-0.5 transition-colors hover:border-accent/50 dark:bg-accent/20"
       >
         {/* Track icons hint at the other position. */}
         <Moon aria-hidden className="absolute right-1.5 h-3.5 w-3.5 text-muted transition-opacity dark:opacity-0" />
         <Sun aria-hidden className="absolute left-1.5 h-3.5 w-3.5 text-amber-300 opacity-0 transition-opacity dark:opacity-70" />
         <span className="relative flex h-[22px] w-[22px] items-center justify-center rounded-full bg-surface shadow-sm shadow-shade/25 transition-transform duration-300 ease-out dark:translate-x-6">
           <Sun aria-hidden className="h-3.5 w-3.5 text-amber-500 dark:hidden" />
-          <Moon aria-hidden className="hidden h-3.5 w-3.5 text-brand-teal-light dark:block" />
+          <Moon aria-hidden className="hidden h-3.5 w-3.5 text-accent-bright dark:block" />
         </span>
       </button>
 
       {hint && (
         <div
           role="status"
-          className="va-in absolute right-0 top-full z-10 mt-3 flex w-max max-w-[240px] items-start gap-2 rounded-xl border border-border bg-surface py-2.5 pl-3 pr-2 text-[13px] text-brand-navy shadow-xl shadow-shade/15"
+          className="va-in absolute right-0 top-full z-10 mt-3 flex w-max max-w-[240px] items-start gap-2 rounded-xl border border-border bg-surface py-2.5 pl-3 pr-2 text-[13px] text-ink shadow-xl shadow-shade/15"
         >
           {/* Arrow pointing up at the switch */}
           <span
             aria-hidden
             className="absolute -top-[7px] right-5 h-3 w-3 rotate-45 border-l border-t border-border bg-surface"
           />
-          <Moon aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-brand-teal" />
+          {dark ? (
+            <Sun aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+          ) : (
+            <Moon aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+          )}
           <p className="leading-snug">
-            <span className="font-semibold">Easier on the eyes?</span>{" "}
-            <span className="text-muted">Flip the switch for dark mode.</span>
+            <span className="font-semibold">{dark ? "Prefer a lighter look?" : "Easier on the eyes?"}</span>{" "}
+            <span className="text-muted">Flip the switch for {dark ? "light" : "dark"} mode.</span>
           </p>
           <button
             type="button"
             onClick={dismissHint}
             aria-label="Dismiss"
-            className="rounded p-0.5 text-muted hover:text-brand-navy"
+            className="rounded p-0.5 text-muted hover:text-ink"
           >
             <X className="h-3.5 w-3.5" />
           </button>

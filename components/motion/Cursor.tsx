@@ -38,12 +38,12 @@ export default function Cursor() {
           height: size,
           backgroundColor:
             next === "label"
-              ? "rgba(14, 147, 132, 0.95)"
+              ? "rgba(22, 166, 216, 0.95)"
               : next === "link"
-                ? "rgba(14, 147, 132, 0.12)"
-                : "rgba(14, 147, 132, 0)",
+                ? "rgba(22, 166, 216, 0.12)"
+                : "rgba(22, 166, 216, 0)",
           borderColor:
-            next === "idle" ? idleRing() : "rgba(14, 147, 132, 0.6)",
+            next === "idle" ? idleRing() : "rgba(22, 166, 216, 0.6)",
           duration: 0.35,
           ease: "power3.out",
         });

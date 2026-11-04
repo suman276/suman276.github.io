@@ -23,3 +23,17 @@ export function scrollToId(id: string) {
   // Lenis applies the header gap from `scroll-padding-top` on <html> itself.
   lenis.scrollTo(el, { offset: -shift });
 }
+
+/** Freeze page scrolling behind a modal (Lenis and native), and restore it. */
+export function lockScroll(locked: boolean) {
+  document.documentElement.style.overflow = locked ? "hidden" : "";
+  if (locked) lenis?.stop();
+  else lenis?.start();
+}
+
+/** Ask the projects section to open a case study by slug. */
+export const OPEN_CASE_EVENT = "case-study:open";
+
+export function openCaseStudy(slug: string) {
+  window.dispatchEvent(new CustomEvent(OPEN_CASE_EVENT, { detail: slug }));
+}

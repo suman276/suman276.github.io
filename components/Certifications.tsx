@@ -1,79 +1,93 @@
-import { Award, BadgeCheck, GraduationCap, Trophy } from "lucide-react";
+import { ArrowUpRight, Award, BadgeCheck, GraduationCap, Trophy } from "lucide-react";
 import { achievements, certifications, education } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
-import TiltCard from "@/components/motion/TiltCard";
 
 export default function Certifications() {
   return (
-    <section id="certifications" className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-        <SectionHeading
-          icon={Award}
-          eyebrow="Credentials"
-          title="Certified on the Now Platform."
-        />
+    <section id="credentials" className="border-t border-border bg-surface/40">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:py-28">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeading
+            index="06"
+            eyebrow="Credentials"
+            title="Certified on the Now Platform."
+            description="One administrator credential and four implementation specialist credentials."
+          />
+          <p data-reveal className="flex items-center gap-3 lg:mb-2">
+            <span data-count={String(certifications.length)} className="text-5xl font-semibold tracking-tight text-ink tabular-nums">
+              {certifications.length}
+            </span>
+            <span className="text-sm leading-snug text-muted">
+              ServiceNow
+              <br />
+              certifications
+            </span>
+          </p>
+        </div>
 
-        <div className="mt-14 grid grid-flow-row-dense gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <TiltCard className="border-transparent bg-panel p-8 text-white sm:col-span-2 lg:row-span-2">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-teal/30 blur-3xl"
-            />
-            <div className="relative flex h-full flex-col justify-between gap-10">
-              <Award className="h-10 w-10 text-brand-teal-light" />
-              <div>
-                <p
-                  data-count={String(certifications.length)}
-                  className="text-7xl font-semibold tracking-tight lg:text-8xl"
-                >
-                  {certifications.length}
-                </p>
-                <p className="mt-2 text-xl font-medium">ServiceNow certifications</p>
-                <p className="mt-2 max-w-sm text-sm leading-relaxed text-white/65">
-                  System administration plus implementation specialist credentials across
-                  ITSM, hardware and software asset management, and data foundations.
-                </p>
-              </div>
-            </div>
-          </TiltCard>
-
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {certifications.map((cert) => (
-            <TiltCard key={cert.code} className="p-6">
-              <BadgeCheck className="h-6 w-6 text-brand-teal" />
-              <p className="mt-6 font-mono text-lg font-semibold text-brand-navy">{cert.code}</p>
-              <p className="mt-1 text-sm leading-snug text-muted">{cert.name}</p>
-            </TiltCard>
-          ))}
-
-          <TiltCard className="p-6 sm:col-span-2 lg:col-span-2">
-            <div className="flex gap-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-teal/10 text-brand-teal">
-                <GraduationCap className="h-5 w-5" />
+            <li key={cert.code} data-reveal className="card card-hover flex flex-col p-5">
+              {/* Badge slot: swap in the official badge image here once available. */}
+              <span className="flex h-11 w-11 items-center justify-center rounded-full border border-accent/40 bg-accent/10 text-accent">
+                <BadgeCheck aria-hidden className="h-5 w-5" />
               </span>
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-muted">Education</p>
-                <p className="mt-1 font-semibold text-brand-navy">{education.degree}</p>
-                <p className="mt-1 text-sm text-muted">{education.school}</p>
-                <span className="mt-3 inline-block rounded-full bg-brand-teal/10 px-3 py-1 text-xs font-semibold text-brand-teal">
-                  {education.detail}
-                </span>
+              <p className="mt-5 font-mono text-base font-semibold text-ink">{cert.code}</p>
+              <p className="mt-1 flex-1 text-[13px] leading-snug text-muted">{cert.name}</p>
+              <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-xs">
+                <span className="text-muted">{cert.issuer}</span>
+                {cert.credentialUrl && (
+                  <a
+                    href={cert.credentialUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 font-semibold text-accent"
+                  >
+                    Verify <ArrowUpRight aria-hidden className="h-3 w-3" />
+                  </a>
+                )}
               </div>
-            </div>
-          </TiltCard>
+            </li>
+          ))}
+        </ul>
 
-          <TiltCard className="p-6">
-            <Trophy className="h-6 w-6 text-brand-teal" />
-            <p className="mt-4 text-xs font-medium uppercase tracking-wider text-muted">
-              Beyond work
-            </p>
-            <ul className="mt-2 space-y-2">
-              {achievements.map((item) => (
-                <li key={item} className="text-sm leading-snug text-brand-navy">
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </TiltCard>
+        <div className="mt-16 grid gap-4 lg:grid-cols-[1.2fr_1fr]">
+          <div data-reveal className="card flex gap-4 p-6">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent">
+              <GraduationCap aria-hidden className="h-5 w-5" />
+            </span>
+            <div>
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Education</h3>
+              <p className="mt-1.5 font-semibold text-ink">{education.degree}</p>
+              <p className="mt-1 text-sm text-muted">{education.school}</p>
+              <span className="mt-3 inline-block rounded-md border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-xs font-semibold text-accent">
+                {education.detail}
+              </span>
+            </div>
+          </div>
+
+          <div data-reveal className="card flex gap-4 p-6">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent">
+              <Trophy aria-hidden className="h-5 w-5" />
+            </span>
+            <div>
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Achievements</h3>
+              <ul className="mt-1.5 space-y-2.5">
+                {achievements.map((a) => {
+                  const [title, detail] = a.split(" — ");
+                  return (
+                    <li key={a} className="flex gap-2.5 text-sm">
+                      <Award aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+                      <span>
+                        <span className="font-semibold text-ink">{title}</span>
+                        {detail && <span className="text-muted"> — {detail}</span>}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>

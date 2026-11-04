@@ -3,73 +3,81 @@
 /* `dark:` utilities follow the site's own theme switch, not only the OS setting. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-:root {
-  color-scheme: light;
-  --background: #f7f9fb;
-  --foreground: #0f2942;
-  --surface: #ffffff;
-  --surface-alt: #eef2f6;
-  --border: #dde4ea;
-  --muted: #5b6b7a;
-
-  /* `brand-navy` is the ink colour for text and fine lines. */
-  --brand-navy: #0f2942;
-  --brand-navy-dark: #081a2c;
-  --brand-teal: #0e9384;
-  --brand-teal-light: #14b8a6;
-  --brand-sky: #0284c7;
-
-  /* Solid buttons: navy in light mode, inverted to near-white in dark mode. */
-  --primary: #0f2942;
-  --primary-hover: #081a2c;
-  --on-primary: #ffffff;
-  /* Large navy surfaces with white text (contact panel, featured cards). */
-  --panel: #0f2942;
-  /* Shadow tint. */
-  --shade: #0f2942;
-  --cursor-ring: rgb(15 41 66 / 0.35);
-}
-
-/* Dark theme. The inline script in layout.tsx sets data-theme before first paint. */
+/*
+ * Design tokens, named by role rather than by colour so each theme can remap them.
+ *   ink          strong text and fine lines
+ *   muted        secondary text
+ *   accent       cyan used for links, icons and highlights
+ *   primary      solid call-to-action buttons (on-primary is their text)
+ *   panel        large emphasised surfaces that carry white text
+ *   chrome       app-style toolbars (workspace nav, Virtual Agent header)
+ *   shade        shadow tint
+ *
+ * Dark is the default theme; the inline script in layout.tsx sets data-theme
+ * before first paint from the visitor's saved choice.
+ */
+:root,
 [data-theme="dark"] {
   color-scheme: dark;
-  --background: #0a1420;
-  --foreground: #e3ebf3;
-  --surface: #101d2b;
-  --surface-alt: #162637;
-  --border: #22374b;
-  --muted: #8ea2b5;
+  --background: #091321;
+  --surface: #0e1b2d;
+  --surface-alt: #14243a;
+  --border: #1e324c;
+  --ink: #eef3f8;
+  --muted: #94a3b8;
 
-  --brand-navy: #e3ebf3;
-  --brand-navy-dark: #050d16;
-  --brand-teal: #0e9384;
-  --brand-teal-light: #2dd4bf;
-  --brand-sky: #38bdf8;
+  --accent: #16a6d8;
+  --accent-bright: #4cc3ec;
+  --accent-2: #4f8cff;
 
-  --primary: #e3ebf3;
-  --primary-hover: #ffffff;
-  --on-primary: #0a1420;
-  --panel: #12304d;
+  --primary: #16a6d8;
+  --primary-hover: #4cc3ec;
+  --on-primary: #061120;
+  --panel: #14243a;
+  --chrome: #060e19;
   --shade: #000000;
-  --cursor-ring: rgb(227 235 243 / 0.4);
+  --cursor-ring: rgb(238 243 248 / 0.35);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --background: #f6f8fb;
+  --surface: #ffffff;
+  --surface-alt: #eef3f8;
+  --border: #dbe3ec;
+  --ink: #0b1a2e;
+  --muted: #526377;
+
+  /* Darker cyan keeps text and icons at AA contrast on white. */
+  --accent: #0a77a3;
+  --accent-bright: #16a6d8;
+  --accent-2: #2f6fe0;
+
+  --primary: #091321;
+  --primary-hover: #14243a;
+  --on-primary: #ffffff;
+  --panel: #091321;
+  --chrome: #091321;
+  --shade: #0b1a2e;
+  --cursor-ring: rgb(9 19 33 / 0.35);
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-foreground: var(--ink);
   --color-surface: var(--surface);
   --color-surface-alt: var(--surface-alt);
   --color-border: var(--border);
   --color-muted: var(--muted);
-  --color-brand-navy: var(--brand-navy);
-  --color-brand-navy-dark: var(--brand-navy-dark);
-  --color-brand-teal: var(--brand-teal);
-  --color-brand-teal-light: var(--brand-teal-light);
-  --color-brand-sky: var(--brand-sky);
+  --color-ink: var(--ink);
+  --color-accent: var(--accent);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-2: var(--accent-2);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-on-primary: var(--on-primary);
   --color-panel: var(--panel);
+  --color-chrome: var(--chrome);
   --color-shade: var(--shade);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -81,11 +89,18 @@ html {
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--ink);
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--brand-teal) 22%, transparent);
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* One visible, consistent focus ring for keyboard users. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
 /*
@@ -96,7 +111,6 @@ body {
  */
 .motion [data-reveal],
 .motion [data-hero],
-.motion [data-hero-name],
 .motion [data-split] {
   visibility: hidden;
 }
@@ -112,68 +126,128 @@ body {
 }
 
 @layer components {
-  .section-heading {
-    font-size: 0.8125rem;
+  .eyebrow {
+    font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--brand-teal);
+    color: var(--accent);
   }
 
   .text-gradient {
-    background: linear-gradient(90deg, var(--brand-teal), var(--brand-sky));
+    background: linear-gradient(90deg, var(--accent-bright), var(--accent-2));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  .hero-grid {
-    background-image: radial-gradient(
-      color-mix(in srgb, var(--brand-navy) 16%, transparent) 1px,
-      transparent 1px
-    );
-    background-size: 24px 24px;
-    mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, black 30%, transparent 80%);
+  /* Fine blueprint grid used behind the hero and architecture diagrams. */
+  .blueprint {
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--ink) 6%, transparent) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .fade-mask {
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 80%);
   }
 
   .photo-fade {
     mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
   }
 
-  .bento-card {
+  /* Base card: thin border, soft shadow, cyan spotlight that follows the pointer. */
+  .card {
     position: relative;
     overflow: hidden;
-    border-radius: 1.25rem;
-    background: var(--surface);
+    border-radius: 1rem;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-alt) 55%, var(--surface)),
+      var(--surface)
+    );
     border: 1px solid var(--border);
-    box-shadow: 0 1px 2px color-mix(in srgb, var(--shade) 4%, transparent);
-    will-change: transform;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--shade) 6%, transparent);
     transition:
-      box-shadow 0.35s ease,
-      border-color 0.35s ease;
+      border-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.3s ease;
   }
 
-  .bento-card::before {
+  .card::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
     background: radial-gradient(
-      420px circle at var(--mx, 50%) var(--my, 50%),
-      color-mix(in srgb, var(--brand-teal) 13%, transparent),
+      380px circle at var(--mx, 50%) var(--my, 0%),
+      color-mix(in srgb, var(--accent) 12%, transparent),
       transparent 45%
     );
     opacity: 0;
-    transition: opacity 0.35s ease;
+    transition: opacity 0.3s ease;
   }
 
-  .bento-card:hover {
-    border-color: color-mix(in srgb, var(--brand-teal) 35%, var(--border));
-    box-shadow: 0 28px 50px -28px color-mix(in srgb, var(--shade) 28%, transparent);
+  .card-hover:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    box-shadow: 0 24px 48px -28px color-mix(in srgb, var(--shade) 55%, transparent);
   }
 
-  .bento-card:hover::before {
+  .card-hover:hover::before {
     opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card-lift:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.375rem;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface-alt) 70%, transparent);
+    padding: 0.2rem 0.55rem;
+    font-size: 0.75rem;
+    line-height: 1.1rem;
+    color: color-mix(in srgb, var(--ink) 85%, transparent);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.625rem;
+    padding: 0.8rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: var(--on-primary);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-hover);
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+    color: var(--ink);
+  }
+
+  .btn-secondary:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
   }
 
   .no-scrollbar {
@@ -185,7 +259,7 @@ body {
   }
 }
 
-/* Virtual Agent: messages and the teaser ease in. */
+/* Messages, hints and modals ease in. */
 @keyframes va-in {
   from {
     opacity: 0;
@@ -201,8 +275,21 @@ body {
   animation: va-in 0.3s ease-out both;
 }
 
+/* Data packets travelling along the hero's architecture lines. */
+@keyframes flow-dash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.flow-line {
+  stroke-dasharray: 4 6;
+  animation: flow-dash 2.4s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .va-in {
+  .va-in,
+  .flow-line {
     animation: none;
   }
 }

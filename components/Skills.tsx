@@ -1,84 +1,75 @@
-import {
-  Code2,
-  Database,
-  Layers,
-  Plug,
-  Puzzle,
-  Sparkles,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
+import { CodeXml, Handshake, Layers, Network, Plug, type LucideIcon } from "lucide-react";
 import { skillGroups } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
-import TiltCard from "@/components/motion/TiltCard";
 
-const layout: Record<string, { icon: LucideIcon; span: string; featured?: boolean }> = {
-  "ServiceNow Modules": { icon: Layers, span: "lg:col-span-2 lg:row-span-2", featured: true },
-  Development: { icon: Code2, span: "lg:col-span-2" },
-  "CMDB & Discovery": { icon: Database, span: "" },
-  Integrations: { icon: Plug, span: "" },
-  Consulting: { icon: Users, span: "lg:col-span-2" },
-  Other: { icon: Puzzle, span: "lg:col-span-2" },
+const icons: Record<string, LucideIcon> = {
+  "ServiceNow Platform": Layers,
+  Development: CodeXml,
+  "CMDB & Discovery": Network,
+  Integrations: Plug,
+  Consulting: Handshake,
+};
+
+// Grid placement for the bento layout: the platform card leads.
+const layout: Record<string, string> = {
+  "ServiceNow Platform": "md:col-span-2",
+  Development: "",
+  "CMDB & Discovery": "",
+  Integrations: "",
+  Consulting: "",
 };
 
 export default function Skills() {
-  return (
-    <section id="skills" className="mx-auto max-w-6xl px-6 py-24 lg:py-32">
-      <SectionHeading
-        icon={Sparkles}
-        eyebrow="Skills"
-        title="Platform expertise, end to end."
-        description="From core ITSM configuration and scripting to CMDB health, integrations and GenAI on the Now Platform."
-      />
+  const groups = skillGroups.filter((g) => icons[g.title]);
+  const extra = skillGroups.find((g) => !icons[g.title]);
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {skillGroups.map((group) => {
-          const { icon: Icon, span, featured } = layout[group.title] ?? {
-            icon: Sparkles,
-            span: "",
-          };
-          return (
-            <TiltCard key={group.title} className={`p-6 ${span} ${featured ? "sm:col-span-2 lg:p-8" : ""}`}>
-              {featured && (
-                <Icon
-                  aria-hidden
-                  className="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 text-brand-teal/[0.07]"
-                />
-              )}
-              <div className="flex items-center justify-between gap-4">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-teal/10 text-brand-teal">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <span className="font-mono text-xs text-muted">
-                  {String(group.skills.length).padStart(2, "0")} skills
-                </span>
-              </div>
-              <h3
-                className={`mt-5 font-semibold text-brand-navy ${featured ? "text-2xl" : "text-lg"}`}
-              >
-                {group.title}
-              </h3>
-              {featured && (
-                <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted">
-                  Core Now Platform products I&apos;ve implemented, configured and extended
-                  across enterprise rollouts, POCs and managed services.
-                </p>
-              )}
-              <ul className={`mt-5 flex flex-wrap ${featured ? "gap-2.5" : "gap-2"}`}>
-                {group.skills.map((skill) => (
-                  <li
-                    key={skill}
-                    className={`rounded-full border border-border bg-background font-medium text-brand-navy/80 ${
-                      featured ? "px-4 py-2 text-sm" : "px-3 py-1 text-xs"
-                    }`}
-                  >
-                    {skill}
-                  </li>
-                ))}
-              </ul>
-            </TiltCard>
-          );
-        })}
+  return (
+    <section id="expertise" className="border-t border-border bg-surface/40">
+      <div className="mx-auto max-w-6xl px-6 py-24 lg:py-28">
+        <SectionHeading
+          index="02"
+          eyebrow="Technical expertise"
+          title="Platform depth, end to end."
+          description="From core ITSM configuration and scripting to CMDB health, integrations and GenAI on the Now Platform."
+        />
+
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {groups.map((group) => {
+            const Icon = icons[group.title];
+            return (
+              <article key={group.title} data-reveal className={`card card-hover p-6 ${layout[group.title]}`}>
+                <div className="flex items-start justify-between gap-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-accent">
+                    <Icon aria-hidden className="h-5 w-5" />
+                  </span>
+                  <span className="font-mono text-[11px] text-muted">
+                    {String(group.skills.length).padStart(2, "0")} capabilities
+                  </span>
+                </div>
+                <h3 className="mt-5 text-lg font-semibold text-ink">{group.title}</h3>
+                <p className="mt-1 text-sm text-muted">{group.description}</p>
+                <ul className="mt-5 flex flex-wrap gap-1.5">
+                  {group.skills.map((skill) => (
+                    <li key={skill} className="chip">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
+        </div>
+
+        {extra && (
+          <p data-reveal className="mt-6 flex flex-wrap items-center gap-2 text-sm text-muted">
+            <span className="mr-1">Also working with</span>
+            {extra.skills.map((s) => (
+              <span key={s} className="chip">
+                {s}
+              </span>
+            ))}
+          </p>
+        )}
       </div>
     </section>
   );

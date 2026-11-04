@@ -168,7 +168,7 @@ const byNumber = (...numbers: string[]) =>
     .map((n) => workspaceProjects.find((p) => p.number === n))
     .filter((p): p is WorkspaceProject => !!p);
 
-const projectsSection: AgentAction = { kind: "section", label: "Open Project Workspace", id: "projects" };
+const projectsSection: AgentAction = { kind: "section", label: "See all projects", id: "projects" };
 
 // ------------------------------------------------------------------ topics
 
@@ -222,7 +222,7 @@ const topics = {
           ]
         : [`Suman holds ${certifications.length} ServiceNow certifications:`],
       list: certifications.map((c) => `${c.code}: ${c.name}`),
-      actions: [{ kind: "section", label: "View credentials", id: "certifications" }],
+      actions: [{ kind: "section", label: "View credentials", id: "credentials" }],
       chips: ["Skills", "Education", "Projects"],
     };
   },
@@ -256,7 +256,7 @@ const topics = {
 
   projects: (): AgentReply => ({
     text: [
-      `Suman has ${workspaceProjects.length} projects on record. Here are three highlights; open any of them in the Project Workspace.`,
+      `Suman has ${workspaceProjects.length} projects on record. Here are three highlights; open any of them for the full case study.`,
     ],
     records: byNumber("PRJ0010001", "PRJ0010008", "PRJ0010007"),
     actions: [projectsSection],
@@ -308,7 +308,7 @@ function entityReply(raw: string, terms: string[], skills: ReturnType<typeof fin
     const group = skills[0].group;
     text.push(
       names.length === 1
-        ? `Yes, ${names[0]} is in Suman's toolkit (${group}).`
+        ? `Yes, ${names[0]} is in Suman's toolkit${group === "Also" ? "" : ` (${group})`}.`
         : `Yes, Suman works with ${names.join(", ")}.`
     );
   }

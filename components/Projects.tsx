@@ -1,21 +1,19 @@
-import { FolderGit2 } from "lucide-react";
-import { workspaceProjects } from "@/lib/data";
 import SectionHeading from "@/components/SectionHeading";
-import ProjectWorkspace from "@/components/ProjectWorkspace";
+import ProjectsExplorer from "@/components/ProjectsExplorer";
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-24 lg:py-32">
+    <section id="projects" className="border-t border-border bg-surface/40 py-24 lg:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
-          icon={FolderGit2}
-          eyebrow="Projects"
-          title="Selected enterprise work."
-          description="Every project as a record in a workspace. Pick one from the list, or search by client or technology."
+          index="04"
+          eyebrow="Featured projects"
+          title="Selected enterprise case studies."
+          description="Nine engagements across delivery and pre-sales. Open any card for the challenge, the solution, how it was built, and the outcome."
         />
       </div>
-      <div className="mx-auto mt-12 max-w-7xl px-4 sm:px-6">
-        <ProjectWorkspace projects={workspaceProjects} />
+      <div className="mt-10">
+        <ProjectsExplorer />
       </div>
     </section>
   );

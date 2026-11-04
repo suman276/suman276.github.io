@@ -1,35 +1,35 @@
-import type { LucideIcon } from "lucide-react";
-
 export default function SectionHeading({
-  icon: Icon,
+  index,
   eyebrow,
   title,
   description,
-  dark = false,
   center = false,
+  onPanel = false,
 }: {
-  icon: LucideIcon;
+  index?: string;
   eyebrow: string;
   title: string;
   description?: string;
-  dark?: boolean;
   center?: boolean;
+  /** On a navy panel, where text is always white. */
+  onPanel?: boolean;
 }) {
   return (
     <div className={`max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
       <p
         data-reveal
-        className={`section-heading flex items-center gap-2 ${
-          center ? "justify-center" : ""
-        } ${dark ? "text-brand-teal-light" : ""}`}
+        className={`eyebrow flex items-center gap-3 ${center ? "justify-center" : ""} ${
+          onPanel ? "text-accent-bright" : ""
+        }`}
       >
-        <Icon className="h-4 w-4" />
+        {index && <span className="font-mono text-[11px] tracking-normal opacity-70">{index}</span>}
+        <span aria-hidden className="h-px w-8 bg-current opacity-40" />
         {eyebrow}
       </p>
       <h2
         data-split
-        className={`mt-3 text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.75rem] ${
-          dark ? "text-white" : "text-brand-navy"
+        className={`mt-4 text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-[2.6rem] ${
+          onPanel ? "text-white" : "text-ink"
         }`}
       >
         {title}
@@ -37,7 +37,7 @@ export default function SectionHeading({
       {description && (
         <p
           data-reveal
-          className={`mt-4 text-lg leading-relaxed ${dark ? "text-white/70" : "text-muted"}`}
+          className={`mt-4 text-base leading-relaxed sm:text-lg ${onPanel ? "text-white/70" : "text-muted"}`}
         >
           {description}
         </p>

@@ -4,66 +4,39 @@ import { gsap, ScrollTrigger, SplitText, useGSAP, MOTION_OK } from "@/lib/gsap";
 
 /*
  * Sections opt into motion with data attributes, so they can stay Server Components:
- *   data-hero / data-hero-name   on-load intro timeline
- *   data-reveal                  fade up when scrolled into view (batched)
- *   data-split                   heading words rise out of a mask
- *   data-scrub-words             words brighten as you scroll through the paragraph
- *   data-count="25+"             number counts up from 0
- *   data-draw                    line grows with scroll (timeline)
- *   data-float                   gentle idle bobbing
- *   data-parallax="-20"          moves by that yPercent while the hero scrolls away
+ *   data-hero / data-hero="title"   on-load intro (the title rises word by word)
+ *   data-reveal                     fade up when scrolled into view (batched)
+ *   data-split                      section heading words rise out of a mask
+ *   data-count="25"                 number counts up when it comes into view
+ *   data-draw                       timeline rail grows with scroll
+ * Motion is deliberately restrained: no parallax, floating or scroll-scrubbed text.
  */
 
 function heroIntro() {
-  const tl = gsap.timeline({ defaults: { ease: "power4.out", duration: 1 } });
+  const tl = gsap.timeline({ defaults: { ease: "power3.out", duration: 0.9 } });
 
-  const name = document.querySelector<HTMLElement>("[data-hero-name]");
-  if (name) {
-    const split = SplitText.create(name, { type: "chars,words", mask: "chars" });
-    tl.set(name, { autoAlpha: 1 }).from(
-      split.chars,
-      { yPercent: 115, stagger: 0.035, duration: 1.1 },
-      0.15
-    );
+  const title = document.querySelector<HTMLElement>("[data-hero='title']");
+  if (title) {
+    const split = SplitText.create(title, { type: "words", mask: "words" });
+    // Gradient text is clipped to its own box, so each split word needs the gradient itself.
+    split.words.forEach((word) => {
+      if (word.closest(".text-gradient")) word.classList.add("text-gradient");
+    });
+    tl.set(title, { autoAlpha: 1 }).from(split.words, { yPercent: 110, stagger: 0.05, duration: 1 }, 0.1);
   }
 
-  tl.from("[data-hero='blob']", { autoAlpha: 0, scale: 0.6, duration: 1.6, ease: "expo.out" }, 0)
-    .fromTo(
-      "[data-hero='photo']",
-      { autoAlpha: 0, clipPath: "inset(100% 0% 0% 0%)", scale: 1.08 },
-      {
-        autoAlpha: 1,
-        clipPath: "inset(0% 0% 0% 0%)",
-        scale: 1,
-        duration: 1.4,
-        ease: "expo.out",
-        // Drop the finished clip so the portrait's ring and shadow aren't cut off.
-        clearProps: "clipPath",
-      },
-      0.2
-    )
-    .from("[data-hero='fade']", { autoAlpha: 0, y: 24, stagger: 0.1, duration: 0.9 }, 0.45)
-    .from(
-      "[data-hero='badge']",
-      { autoAlpha: 0, scale: 0.6, y: 20, stagger: 0.12, duration: 0.7, ease: "back.out(2)" },
-      0.9
-    );
+  tl.from("[data-hero]:not([data-hero='title']):not([data-hero='visual'])", { autoAlpha: 0, y: 18, stagger: 0.08 }, 0.3)
+    .from("[data-hero='visual']", { autoAlpha: 0, y: 24, scale: 0.98, duration: 1.2 }, 0.35);
 }
 
 function reveals() {
   const items = gsap.utils.toArray<HTMLElement>("[data-reveal]");
-  gsap.set(items, { autoAlpha: 0, y: 40 });
+  gsap.set(items, { autoAlpha: 0, y: 24 });
   ScrollTrigger.batch(items, {
-    start: "top 88%",
+    start: "top 90%",
     once: true,
     onEnter: (batch) =>
-      gsap.to(batch, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.08,
-      }),
+      gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out", stagger: 0.06 }),
   });
 }
 
@@ -73,49 +46,51 @@ function splitHeadings() {
     gsap.set(el, { autoAlpha: 1 });
     gsap.from(split.words, {
       yPercent: 110,
-      duration: 1,
-      ease: "power4.out",
-      stagger: 0.06,
-      scrollTrigger: { trigger: el, start: "top 88%", once: true },
+      duration: 0.9,
+      ease: "power3.out",
+      stagger: 0.04,
+      scrollTrigger: { trigger: el, start: "top 90%", once: true },
     });
   });
 }
 
-function scrubWords() {
-  gsap.utils.toArray<HTMLElement>("[data-scrub-words]").forEach((el) => {
-    const split = SplitText.create(el, { type: "words" });
-    gsap.fromTo(
-      split.words,
-      { opacity: 0.18 },
-      {
-        opacity: 1,
-        stagger: 0.1,
-        ease: "none",
-        scrollTrigger: { trigger: el, start: "top 80%", end: "bottom 50%", scrub: true },
-      }
-    );
-  });
-}
-
+/*
+ * Counters. The real value is always in the HTML, so anything that never runs
+ * the animation (background tabs, crawlers, link previews, full-page
+ * screenshots) still sees "25", never "0". The count-up only starts once the
+ * number is actually on screen in a visible tab, and if the tab is hidden
+ * mid-count it jumps straight to the final value.
+ */
 function counters() {
   gsap.utils.toArray<HTMLElement>("[data-count]").forEach((el) => {
-    // Read the target from the attribute, not the text, so re-running is idempotent.
     const match = el.dataset.count?.match(/^(\d+)(.*)$/);
     if (!match) return;
     const target = Number(match[1]);
     const suffix = match[2];
-    const counter = { value: 0 };
-    // Above-the-fold counters belong to the intro; the rest wait to be scrolled to.
-    const inHero = !!el.closest("#top");
-    el.textContent = `0${suffix}`;
-    gsap.to(counter, {
-      value: target,
-      duration: 1.8,
-      ease: "power2.out",
-      delay: inHero ? 0.9 : 0,
-      scrollTrigger: inHero ? undefined : { trigger: el, start: "top 90%", once: true },
-      onUpdate: () => {
-        el.textContent = `${Math.round(counter.value)}${suffix}`;
+    const final = `${target}${suffix}`;
+
+    ScrollTrigger.create({
+      trigger: el,
+      start: "top 92%",
+      once: true,
+      onEnter: () => {
+        if (document.visibilityState !== "visible") return;
+        const counter = { value: 0 };
+        const tween = gsap.to(counter, {
+          value: target,
+          duration: 1.4,
+          ease: "power2.out",
+          onUpdate: () => {
+            el.textContent = `${Math.round(counter.value)}${suffix}`;
+          },
+          onComplete: () => {
+            el.textContent = final;
+          },
+        });
+        const finish = () => {
+          if (document.visibilityState !== "visible") tween.progress(1);
+        };
+        document.addEventListener("visibilitychange", finish, { once: true });
       },
     });
   });
@@ -130,38 +105,23 @@ function drawLines() {
         scaleY: 1,
         transformOrigin: "top center",
         ease: "none",
-        scrollTrigger: {
-          trigger: el.parentElement,
-          start: "top 70%",
-          end: "bottom 60%",
-          scrub: true,
-        },
+        scrollTrigger: { trigger: el.parentElement, start: "top 75%", end: "bottom 60%", scrub: true },
       }
     );
   });
 }
 
-function floaters() {
-  gsap.utils.toArray<HTMLElement>("[data-float]").forEach((el, i) => {
-    gsap.to(el, {
-      y: -10,
-      duration: 2.4 + i * 0.4,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-      delay: i * 0.3,
-    });
-  });
-}
-
-function parallax() {
-  gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
-    gsap.to(el, {
-      yPercent: Number(el.dataset.parallax),
-      ease: "none",
-      scrollTrigger: { trigger: "#top", start: "top top", end: "bottom top", scrub: true },
-    });
-  });
+/** One delegated listener feeds the cards' pointer spotlight (pure CSS otherwise). */
+function spotlight() {
+  const onMove = (e: PointerEvent) => {
+    const card = (e.target as Element).closest<HTMLElement>(".card-hover");
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    card.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+  window.addEventListener("pointermove", onMove, { passive: true });
+  return () => window.removeEventListener("pointermove", onMove);
 }
 
 export default function PageAnimations() {
@@ -173,18 +133,19 @@ export default function PageAnimations() {
       heroIntro();
       reveals();
       splitHeadings();
-      scrubWords();
       counters();
       drawLines();
-      floaters();
-      parallax();
     });
 
+    const stopSpotlight = spotlight();
     root.classList.add("motion-ready");
     // Web fonts change text metrics; re-measure every trigger once they load.
     document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
-    return () => mm.revert();
+    return () => {
+      mm.revert();
+      stopSpotlight();
+    };
   });
 
   return null;

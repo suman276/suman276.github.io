@@ -11,8 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { reply, welcome, type AgentAction, type AgentReply } from "@/lib/agent";
-import { OPEN_RECORD_EVENT } from "@/components/ProjectWorkspace";
-import { scrollToId } from "@/lib/scroll";
+import { openCaseStudy, scrollToId } from "@/lib/scroll";
 
 type Message =
   | { id: number; from: "user"; text: string }
@@ -22,7 +21,7 @@ const TEASER_KEY = "va-teaser-dismissed";
 
 function BotAvatar() {
   return (
-    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-teal text-white">
+    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent text-white">
       <Bot className="h-4 w-4" />
     </span>
   );
@@ -124,9 +123,9 @@ export default function VirtualAgent() {
     scrollToId(id);
   };
 
-  const openRecord = (number: string) => {
+  const openRecord = (slug: string) => {
     setOpen(false);
-    window.dispatchEvent(new CustomEvent(OPEN_RECORD_EVENT, { detail: number }));
+    openCaseStudy(slug);
   };
 
   const last = messages[messages.length - 1];
@@ -135,7 +134,7 @@ export default function VirtualAgent() {
     <>
       {/* Teaser bubble */}
       {teaser && !open && (
-        <div className="va-in fixed bottom-24 right-5 z-[60] flex max-w-[260px] items-start gap-2 rounded-2xl rounded-br-md border border-border bg-surface p-3 pr-2 text-[13px] text-brand-navy shadow-xl shadow-shade/10">
+        <div className="va-in fixed bottom-24 right-5 z-[60] flex max-w-[260px] items-start gap-2 rounded-2xl rounded-br-md border border-border bg-surface p-3 pr-2 text-[13px] text-ink shadow-xl shadow-shade/10">
           <button type="button" onClick={toggle} className="text-left leading-snug">
             <span className="font-semibold">Hi! Questions about Suman&apos;s work?</span>{" "}
             <span className="text-muted">Ask the Virtual Agent.</span>
@@ -144,7 +143,7 @@ export default function VirtualAgent() {
             type="button"
             onClick={hideTeaser}
             aria-label="Dismiss"
-            className="rounded p-0.5 text-muted hover:text-brand-navy"
+            className="rounded p-0.5 text-muted hover:text-ink"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -165,7 +164,7 @@ export default function VirtualAgent() {
       >
         {open ? <X className="h-6 w-6" /> : <BotMessageSquare className="h-6 w-6" />}
         {!open && (
-          <span className="absolute right-0.5 top-0.5 h-3.5 w-3.5 rounded-full border-2 border-surface bg-brand-teal-light" />
+          <span className="absolute right-0.5 top-0.5 h-3.5 w-3.5 rounded-full border-2 border-surface bg-accent-bright" />
         )}
       </button>
 
@@ -179,12 +178,12 @@ export default function VirtualAgent() {
           open ? "visible opacity-100" : "invisible translate-y-4 opacity-0 sm:scale-95"
         }`}
       >
-        <header className="flex shrink-0 items-center gap-3 bg-brand-navy-dark px-4 py-3 text-white">
+        <header className="flex shrink-0 items-center gap-3 bg-chrome px-4 py-3 text-white">
           <span className="relative">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-teal">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent">
               <Bot className="h-5 w-5" />
             </span>
-            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-brand-navy-dark bg-emerald-400" />
+            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-chrome bg-emerald-400" />
           </span>
           <div className="min-w-0 flex-1">
             <p className="font-semibold leading-tight">Virtual Agent</p>
@@ -252,7 +251,7 @@ export default function VirtualAgent() {
         </div>
 
         <form onSubmit={onSubmit} className="shrink-0 border-t border-border bg-surface p-3">
-          <div className="flex items-center gap-2 rounded-full border border-border bg-background py-1 pl-4 pr-1 focus-within:border-brand-teal">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-background py-1 pl-4 pr-1 focus-within:border-accent">
             <label htmlFor="va-input" className="sr-only">
               Type your question
             </label>
@@ -264,13 +263,13 @@ export default function VirtualAgent() {
               placeholder="Type your question…"
               autoComplete="off"
               maxLength={200}
-              className="min-w-0 flex-1 bg-transparent py-1.5 text-[13px] text-brand-navy placeholder:text-muted focus:outline-none"
+              className="min-w-0 flex-1 bg-transparent py-1.5 text-[13px] text-ink placeholder:text-muted focus:outline-none"
             />
             <button
               type="submit"
               disabled={!input.trim() || typing}
               aria-label="Send"
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-teal text-white transition-colors hover:bg-brand-teal-light disabled:bg-border disabled:text-muted"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-white transition-colors hover:bg-accent-bright disabled:bg-border disabled:text-muted"
             >
               <SendHorizontal className="h-4 w-4" />
             </button>
@@ -295,13 +294,13 @@ function BotMessage({
   showChips: boolean;
   onChip: (text: string) => void;
   onAction: (id: string) => void;
-  onRecord: (number: string) => void;
+  onRecord: (slug: string) => void;
 }) {
   return (
     <div className="va-in flex items-start gap-2">
       <BotAvatar />
       <div className="min-w-0 flex-1 space-y-2">
-        <div className="space-y-2 rounded-2xl rounded-tl-md border border-border bg-surface px-3.5 py-2.5 leading-relaxed text-brand-navy">
+        <div className="space-y-2 rounded-2xl rounded-tl-md border border-border bg-surface px-3.5 py-2.5 leading-relaxed text-ink">
           {r.text.map((t) => (
             <p key={t}>{t}</p>
           ))}
@@ -310,7 +309,7 @@ function BotMessage({
             <ul className="space-y-1">
               {r.list.map((item) => (
                 <li key={item} className="flex gap-2">
-                  <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-teal" />
+                  <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -326,7 +325,7 @@ function BotMessage({
                     {g.items.map((s) => (
                       <li
                         key={s}
-                        className="rounded bg-surface-alt px-1.5 py-0.5 text-[11px] text-brand-navy/85"
+                        className="rounded bg-surface-alt px-1.5 py-0.5 text-[11px] text-ink/85"
                       >
                         {s}
                       </li>
@@ -338,10 +337,10 @@ function BotMessage({
           )}
 
           {r.timeline && (
-            <ol className="space-y-3 border-l-2 border-brand-teal/30 pl-3 pt-1">
+            <ol className="space-y-3 border-l-2 border-accent/30 pl-3 pt-1">
               {r.timeline.map((t) => (
                 <li key={t.title} className="relative">
-                  <span className="absolute -left-[18px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-surface bg-brand-teal" />
+                  <span className="absolute -left-[18px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-surface bg-accent" />
                   <p className="font-semibold leading-snug">{t.title}</p>
                   <p className="text-[12px]">{t.subtitle}</p>
                   <p className="text-[11px] text-muted">{t.meta}</p>
@@ -357,25 +356,25 @@ function BotMessage({
             className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm"
           >
             <div className="flex items-center justify-between gap-2 border-b border-border bg-surface-alt/60 px-3 py-1.5">
-              <span className="font-mono text-[11px] text-brand-teal">{p.number}</span>
+              <span className="font-mono text-[11px] text-accent">{p.number}</span>
               <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
                 {p.engagement}
               </span>
             </div>
             <div className="px-3 py-2.5">
-              <p className="font-semibold leading-snug text-brand-navy">{p.title}</p>
+              <p className="font-semibold leading-snug text-ink">{p.title}</p>
               <p className="text-[11px] text-muted">{p.client}</p>
-              <p className="mt-2 flex items-baseline gap-1.5 text-[12px] text-brand-navy/85">
+              <p className="mt-2 flex items-baseline gap-1.5 text-[12px] text-ink/85">
                 <span className="text-gradient text-base font-semibold">{p.metric.value}</span>
                 <span className="line-clamp-1">{p.metric.label}</span>
               </p>
             </div>
             <button
               type="button"
-              onClick={() => onRecord(p.number)}
-              className="flex w-full items-center justify-between border-t border-border px-3 py-2 text-[12px] font-semibold text-brand-sky transition-colors hover:bg-surface-alt/60"
+              onClick={() => onRecord(p.slug)}
+              className="flex w-full items-center justify-between border-t border-border px-3 py-2 text-[12px] font-semibold text-accent transition-colors hover:bg-surface-alt/60"
             >
-              Open record
+              View case study
               <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </article>
@@ -396,7 +395,7 @@ function BotMessage({
                 key={c}
                 type="button"
                 onClick={() => onChip(c)}
-                className="rounded-full border border-brand-teal/40 bg-surface px-3 py-1 text-[12px] font-medium text-brand-teal transition-colors hover:bg-brand-teal hover:text-white"
+                className="rounded-full border border-accent/40 bg-surface px-3 py-1 text-[12px] font-medium text-accent transition-colors hover:bg-accent hover:text-white"
               >
                 {c}
               </button>

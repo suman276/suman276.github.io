@@ -1,160 +1,102 @@
-import Image from "next/image";
-import { ArrowRight, BadgeCheck, Bot, Download, Factory } from "lucide-react";
+import { ArrowRight, Download, Mail } from "lucide-react";
 import { certifications, experience, profile, stats } from "@/lib/data";
-import Magnetic from "@/components/motion/Magnetic";
+import LinkedInIcon from "@/components/LinkedInIcon";
+import PlatformVisual from "@/components/PlatformVisual";
 
-const badges = [
-  {
-    icon: BadgeCheck,
-    text: `${certifications.length}× ServiceNow Certified`,
-    className: "left-0 top-16 sm:-left-6",
-  },
-  {
-    icon: Bot,
-    text: "NOW Assist · GenAI",
-    className: "right-0 top-1/3 sm:-right-4",
-  },
-  {
-    icon: Factory,
-    text: "25 plants live",
-    className: "bottom-20 left-2 sm:-left-2",
-  },
-];
+const current = experience[0];
 
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden">
-      <div aria-hidden className="hero-grid absolute inset-0" />
+    <section id="top" aria-labelledby="hero-title" className="relative overflow-hidden">
+      <div aria-hidden className="blueprint fade-mask absolute inset-0 opacity-60" />
       <div
         aria-hidden
-        data-parallax="-25"
-        className="pointer-events-none absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full bg-brand-teal/15 blur-3xl"
-      />
-      <div
-        aria-hidden
-        data-parallax="-45"
-        className="pointer-events-none absolute -right-32 top-24 h-[440px] w-[440px] rounded-full bg-sky-400/15 blur-3xl"
+        className="pointer-events-none absolute -top-48 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
       />
 
-      <div className="relative mx-auto grid max-w-6xl gap-14 px-6 pb-16 pt-14 lg:grid-cols-[1.3fr_1fr] lg:items-center lg:pb-20 lg:pt-20">
+      <div className="relative mx-auto grid max-w-6xl gap-14 px-6 pb-16 pt-14 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:gap-10 lg:pb-20 lg:pt-20">
         <div>
           <p
-            data-hero="fade"
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/80 px-3.5 py-1.5 text-xs font-medium text-muted shadow-sm backdrop-blur"
+            data-hero
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3.5 py-1.5 text-xs font-medium text-muted backdrop-blur"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60 motion-reduce:animate-none" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            Currently at {experience[0].company.replace(" Pvt. Ltd.", "")} · {profile.location}
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            3+ years on ServiceNow · {certifications.length}× certified
           </p>
 
           <h1
-            data-hero-name
-            className="mt-6 text-5xl font-semibold leading-[1.02] tracking-tight text-brand-navy sm:text-6xl lg:text-7xl"
+            id="hero-title"
+            data-hero="title"
+            className="mt-6 text-[2.6rem] font-semibold leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-[3.6rem]"
           >
-            {profile.name}
+            Building Enterprise Solutions with{" "}
+            <span className="text-gradient">ServiceNow &amp; AI.</span>
           </h1>
 
-          <p data-hero="fade" className="text-gradient mt-4 text-xl font-semibold sm:text-2xl">
-            {profile.role}
-          </p>
-
-          <p data-hero="fade" className="mt-5 max-w-xl text-lg leading-relaxed text-muted">
-            {profile.tagline}
-          </p>
-
-          <div data-hero="fade" className="mt-9 flex flex-wrap gap-4">
-            <Magnetic>
-              <a
-                href="#projects"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-on-primary shadow-lg shadow-shade/20 transition-colors hover:bg-primary-hover"
-              >
-                View projects
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href="/resume.pdf"
-                download
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-brand-navy transition-colors hover:border-brand-teal/50"
-              >
-                <Download className="h-4 w-4" />
-                Download resume
-              </a>
-            </Magnetic>
-          </div>
-        </div>
-
-        <div className="relative mx-auto w-full max-w-[340px] lg:max-w-[380px]">
-          <div
-            data-hero="blob"
-            aria-hidden
-            className="absolute inset-x-4 bottom-6 top-12 rounded-[42%_58%_55%_45%/48%_42%_58%_52%] bg-gradient-to-br from-brand-teal/30 via-sky-300/25 to-brand-sky/10"
-          />
-          {/* Both themes share one slot, so the layout doesn't shift on toggle. */}
-          <div
-            data-parallax="10"
-            className="relative mx-auto flex aspect-[315/438] w-full max-w-[315px] items-center justify-center"
+          <ul
+            data-hero
+            aria-label="Designations"
+            className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-ink/85"
           >
-            {/* Light mode: framed circular portrait */}
-            <div
-              data-hero="photo"
-              className="relative aspect-square w-full overflow-hidden rounded-full shadow-2xl shadow-shade/20 ring-[6px] ring-surface dark:hidden"
+            {profile.designations.map((d, i) => (
+              <li key={d} className="flex items-center gap-3">
+                {i > 0 && <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70" />}
+                {d}
+              </li>
+            ))}
+          </ul>
+
+          <p data-hero className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            {profile.description}
+          </p>
+
+          <p data-hero className="mt-4 max-w-xl text-sm leading-relaxed text-muted">
+            I&apos;m <span className="font-semibold text-ink">{profile.name}</span>, {current.role} at{" "}
+            {current.company.replace(" Pvt. Ltd.", "")}. {profile.intro}
+          </p>
+
+          <div data-hero className="mt-8 flex flex-wrap items-center gap-3">
+            <a href="#projects" className="btn btn-primary group">
+              View projects
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </a>
+            <a href="/resume.pdf" download className="btn btn-secondary">
+              <Download className="h-4 w-4" />
+              Download resume
+            </a>
+            <a href="#contact" className="btn btn-secondary">
+              <Mail className="h-4 w-4" />
+              Contact me
+            </a>
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn profile (opens in a new tab)"
+              className="btn btn-secondary px-3"
             >
-              <Image
-                src="/images/profile-light.jpg"
-                alt="Suman Mondal"
-                fill
-                sizes="315px"
-                priority
-                // A hair of zoom keeps the source's black corners out of the anti-aliased edge.
-                className="scale-[1.02] object-cover"
-              />
-            </div>
-
-            {/* Dark mode: black-and-white cutout */}
-            <Image
-              data-hero="photo"
-              src="/images/profile.webp"
-              alt="Suman Mondal"
-              width={315}
-              height={438}
-              priority
-              className="photo-fade absolute inset-0 hidden h-full w-full object-contain dark:block"
-            />
+              <LinkedInIcon />
+            </a>
           </div>
-
-          {badges.map(({ icon: Icon, text, className }) => (
-            <div key={text} data-hero="badge" className={`absolute ${className}`}>
-              <div
-                data-float
-                className="flex items-center gap-2 rounded-xl border border-border bg-surface/90 px-3 py-2 text-xs font-semibold text-brand-navy shadow-lg shadow-shade/10 backdrop-blur"
-              >
-                <Icon className="h-4 w-4 text-brand-teal" />
-                {text}
-              </div>
-            </div>
-          ))}
         </div>
+
+        <PlatformVisual />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-6 pb-20">
-        <dl
-          data-hero="fade"
-          className="grid grid-cols-2 divide-border overflow-hidden rounded-2xl border border-border bg-surface/80 shadow-sm backdrop-blur max-lg:gap-px max-lg:bg-border lg:grid-cols-4 lg:divide-x"
-        >
+      <div className="relative mx-auto max-w-6xl px-6 pb-20 lg:pb-24">
+        <h2 className="sr-only">Professional impact</h2>
+        <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
           {stats.map((stat) => (
-            <div key={stat.label} className="bg-surface/90 px-6 py-6 lg:bg-transparent">
-              <dt className="sr-only">{stat.label}</dt>
+            // The label comes first for screen readers; flex-col-reverse puts the number on top.
+            <div key={stat.label} data-reveal className="card flex flex-col-reverse px-5 py-5 sm:px-6">
+              <dt className="mt-1.5 text-[13px] leading-snug text-muted">{stat.label}</dt>
               <dd
                 data-count={stat.value}
-                className="text-4xl font-semibold tracking-tight text-brand-navy"
+                className="text-3xl font-semibold tracking-tight text-ink tabular-nums sm:text-4xl"
               >
                 {stat.value}
               </dd>
-              <p className="mt-1 text-sm text-muted">{stat.label}</p>
+              <span aria-hidden className="absolute inset-x-5 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent" />
             </div>
           ))}
         </dl>
